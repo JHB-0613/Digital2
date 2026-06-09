@@ -1,0 +1,768 @@
+```html
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAU 게임기획 9주차 학습 평가 시스템</title>
+    <style>
+        :root {
+            --primary-color: #004b93;
+            --secondary-color: #f4f7fa;
+            --accent-color: #e28743;
+            --success-color: #2e7d32;
+            --error-color: #c62828;
+            --text-dark: #2c3e50;
+            --border-color: #dcdde1;
+        }
+
+        body {
+            font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+            background-color: #f8f9fa;
+            color: var(--text-dark);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        header p {
+            margin: 5px 0 0 0;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* 주차별 이동 버튼 컨테이너 */
+        .nav-container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 0 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .nav-btn {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 8px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #555;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn:hover {
+            background-color: #eee;
+            border-color: #999;
+        }
+
+        .nav-btn.active {
+            background-color: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        }
+
+        .nav-btn.disabled {
+            background-color: #e9ecef;
+            color: #adb5bd;
+            cursor: not-allowed;
+            border-color: #dee2e6;
+        }
+
+        /* 메인 콘텐츠 */
+        main {
+            max-width: 850px;
+            margin: 0 auto 50px auto;
+            padding: 0 15px;
+        }
+
+        .quiz-intro {
+            background-color: white;
+            border-left: 5px solid var(--primary-color);
+            padding: 15px 20px;
+            margin-bottom: 30px;
+            border-radius: 0 8px 8px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .section-title {
+            font-size: 18px;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 6px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        /* 문제 카드 스타일 */
+        .question-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border: 1px solid #eef0f2;
+        }
+
+        .question-header {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .q-num {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 4px;
+            padding: 2px 8px;
+            font-size: 12px;
+            margin-right: 10px;
+            white-space: nowrap;
+            margin-top: 2px;
+        }
+
+        /* 객관식 보기 스타일 */
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 15px 0;
+        }
+
+        .option-item {
+            margin-bottom: 10px;
+        }
+
+        .option-label {
+            display: block;
+            background-color: #fdfdfd;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 12px 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14.5px;
+        }
+
+        .option-label:hover {
+            background-color: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+
+        .option-item input[type="radio"] {
+            margin-right: 10px;
+            transform: scale(1.1);
+            vertical-align: middle;
+        }
+
+        /* 단답형/서술형 입력 */
+        .text-input-container {
+            margin-bottom: 15px;
+        }
+
+        .short-answer-input {
+            width: 100%;
+            max-width: 400px;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 14.5px;
+            box-sizing: border-box;
+        }
+
+        .essay-answer-input {
+            width: 100%;
+            height: 120px;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 14.5px;
+            resize: vertical;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+
+        /* 결과 확인 버튼 */
+        .action-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .action-btn:hover {
+            background-color: #00366b;
+        }
+
+        /* 피드백 및 해설박스 */
+        .feedback-box {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 6px;
+            display: none;
+            font-size: 14px;
+        }
+
+        .feedback-box.correct {
+            display: block;
+            background-color: #e8f5e9;
+            border-left: 5px solid var(--success-color);
+            color: #1b5e20;
+        }
+
+        .feedback-box.incorrect {
+            display: block;
+            background-color: #ffebee;
+            border-left: 5px solid var(--error-color);
+            color: #b71c1c;
+        }
+
+        .feedback-box.essay-feedback {
+            display: block;
+            background-color: #fff8e1;
+            border-left: 5px solid #ffb300;
+            color: #5d4037;
+        }
+
+        .explanation-title {
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .explanation-content {
+            margin-top: 5px;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        /* 점수 요약 하단 바 */
+        .summary-box {
+            background-color: white;
+            border: 2px solid var(--primary-color);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin-top: 40px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .summary-box h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+
+        .score-display {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--accent-color);
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>중앙대학교 게임기획 학습 평가 시스템</h1>
+    <p>강의자료 기반 자가 진단 평가 (9주차: 발상, 소재, 주제, 세계관, 줄거리)</p>
+</header>
+
+<div class="nav-container">
+    <button class="nav-btn disabled" onclick="alert('1주차 자료는 준비 중입니다.')">1주차</button>
+    <button class="nav-btn disabled" onclick="alert('2주차 자료는 준비 중입니다.')">2주차</button>
+    <button class="nav-btn disabled" onclick="alert('3주차 자료는 준비 중입니다.')">3주차</button>
+    <button class="nav-btn disabled" onclick="alert('4주차 자료는 준비 중입니다.')">4주차</button>
+    <button class="nav-btn disabled" onclick="alert('5주차 자료는 준비 중입니다.')">5주차</button>
+    <button class="nav-btn disabled" onclick="alert('6주차 자료는 준비 중입니다.')">6주차</button>
+    <button class="nav-btn disabled" onclick="alert('7주차 자료는 준비 중입니다.')">7주차</button>
+    <button class="nav-btn disabled" onclick="alert('8주차 자료는 준비 중입니다.')">8주차</button>
+    <button class="nav-btn active" onclick="location.reload();">9주차</button>
+    <button class="nav-btn disabled" onclick="alert('10주차 자료는 다음 세션에서 활성화됩니다.')">10주차</button>
+    <button class="nav-btn disabled" onclick="alert('11주차 자료는 다음 세션에서 활성화됩니다.')">11주차</button>
+    <button class="nav-btn disabled" onclick="alert('12주차 자료는 다음 세션에서 활성화됩니다.')">12주차</button>
+    <button class="nav-btn disabled" onclick="alert('13주차 자료는 다음 세션에서 활성화됩니다.')">13주차</button>
+    <button class="nav-btn disabled" onclick="alert('14주차 자료는 다음 세션에서 활성화됩니다.')">14주차</button>
+</div>
+
+<main>
+    <div class="quiz-intro">
+        <strong>💡 9주차 학습 안내:</strong> 본 퀴즈는 제공된 9주차 강의 자료를 바탕으로 설계되었습니다. 대상을 세분화해야 하는 이유와 퍼소나 시나리오의 의의, 소재와 주제의 유기적 결합, 톨킨과 울프의 세계관 설계 및 시놉시스의 작성 요령을 평가합니다. 문제를 푼 후 [정답 확인] 버튼을 누르면 즉시 채점과 해설이 제공됩니다.
+    </div>
+
+    <div class="section-title">PART 1. 사지선다형 객관식 문항 (10문제)</div>
+
+    <div class="question-card" id="q1-card">
+        <div class="question-header">
+            <span class="q-num">Q1</span>
+            <div>강의자료에서 명시한 '게임 시장의 기본 전제'로 가장 올바른 것은 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q1" value="1"> 시장은 좁고 구매자의 선호는 고정되어 있다.</label>
+            </li>
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q1" value="2"> 기획자가 좋아하는 게임을 남들도 똑같이 좋아한다.</label>
+            </li>
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q1" value="3"> 시장은 넓고 구매자는 다양하다.</label>
+            </li>
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q1" value="4"> 대상을 세분화할 때에는 추가적인 비용이 전혀 들지 않는다.</label>
+            </li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(1, 3)">정답 확인</button>
+        <div class="feedback-box" id="feedback-1"></div>
+    </div>
+
+    <div class="question-card" id="q2-card">
+        <div class="question-header">
+            <span class="q-num">Q2</span>
+            <div>강의자료에서 대상을 세분화해야 하는 근본적인 목적으로 설명한 것과 일치하지 않는 것은?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q2" value="1"> 특정 집단에 속한 사람들에게 다른 게임보다 더 큰 만족을 제공하기 위해</label>
+            </li>
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q2" value="2"> 특정 집단에 매력적인 제공물이 다른 집단에는 그렇지 않을 수 있기 때문에</label>
+            </li>
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q2" value="3"> 집단별로 구분하여 각 집단의 취향에 따른 유인책을 펼치기 위해</label>
+            </li>
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q2" value="4"> 경쟁사와의 마찰을 줄이고 시장 독점을 안전하게 보장받기 위해</label>
+            </li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(2, 4)">정답 확인</button>
+        <div class="feedback-box" id="feedback-2"></div>
+    </div>
+
+    <div class="question-card" id="q3-card">
+        <div class="question-header">
+            <span class="q-num">Q3</span>
+            <div>강의자료에 제시된 '엔터테인먼트 3사의 고객 분석' 비유 중, 기획자가 "너희들이 뭘 좋아하는지 몰라서 그냥 내가 좋아하는 것으로 준비했다"라고 매칭된 기획적 태도를 보여주는 기획 스타일은 어디인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q3" value="1"> YG 스타일</label>
+            </li>
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q3" value="2"> SM 스타일</label>
+            </li>
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q3" value="3"> JYP 스타일</label>
+            </li>
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q3" value="4"> CAU 스타일</label>
+            </li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(3, 1)">정답 확인</button>
+        <div class="feedback-box" id="feedback-3"></div>
+    </div>
+
+    <div class="question-card" id="q4-card">
+        <div class="question-header">
+            <span class="q-num">Q4</span>
+            <div>강의자료에서 설명한 '퍼소나(Persona) 시나리오 만들기'에 대한 설명으로 가장 올바른 것은?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q4" value="1"> 가상으로 설정한 핵심 타겟 인물이므로 조건 없이 맹신해야만 한다.</label>
+            </li>
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q4" value="2"> 내가 만든 게임의 주요 고객이 될 가상의 인물을 하나 설정하고 특징을 부여하여 취향을 추리하는 기법이다.</label>
+            </li>
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q4" value="3"> 전 세계의 모든 유저층을 만족시키기 위해 평균값을 내어 대표 인물을 하나만 지정하는 기법이다.</label>
+            </li>
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q4" value="4"> 게임 시나리오 내에 등장하는 보스 몬스터의 성격과 외형을 구체적으로 기획하는 단계이다.</label>
+            </li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(4, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-4"></div>
+    </div>
+
+    <div class="question-card" id="q5-card">
+        <div class="question-header">
+            <span class="q-num">Q5</span>
+            <div>게임 기획에서 '소재'를 기획할 때 고려해야 하는 두 가지 핵심 축으로 강의자료(19페이지)에 명시된 구성 요소는 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q5" value="1"> 그래픽 소재와 오디오 소재</label>
+            </li>
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q5" value="2"> 표층소재(재료)와 시스템 소재(규칙)</label>
+            </li>
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q5" value="3"> 역사적 소재와 미래적 소재</label>
+            </li>
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q5" value="4"> 1인칭 소재와 3인칭 소재</label>
+            </li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(5, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-5"></div>
+    </div>
+
+    <div class="question-card" id="q6-card">
+        <div class="question-header">
+            <span class="q-num">Q6</span>
+            <div>강의자료에서 게임 기획의 '주제(Theme)'가 가지는 역할로 정의한 내용이 아닌 것은?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q6" value="1"> 게임 안에 담겨 있는 중심 사상이자 핵심 내용이다.</label>
+            </li>
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q6" value="2"> 게임의 과정을 통해 달성하고자 하는 궁극적 목적이다.</label>
+            </li>
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q6" value="3"> 다양한 구성요소들을 연계하여 한 방향으로 끌고 나가는 구심점이다.</label>
+            </li>
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q6" value="4"> 어떤 캐릭터가 무엇 등장하여 어떤 비주얼로 표현되는지 나타내는 '재료' 자체를 뜻한다.</label>
+            </li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(6, 4)">정답 확인</button>
+        <div class="feedback-box" id="feedback-6"></div>
+    </div>
+
+    <div class="question-card" id="q7-card">
+        <div class="question-header">
+            <span class="q-num">Q7</span>
+            <div>톨킨(Tolkien, 1947)이 제안한 개념으로, 플레이어가 가상 세계(secondary world)에 들어올 때 '이 세계의 법칙을 잠시 신뢰한다'는 묵시적 계약을 뜻하는 명칭은 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q7" value="1"> 상상계 계약</label>
+            </li>
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q7" value="2"> 몰입의 계약</label>
+            </li>
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q7" value="3"> 규칙의 계약</label>
+            </li>
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q7" value="4"> 상호작용 법칙</label>
+            </li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(7, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-7"></div>
+    </div>
+
+    <div class="question-card" id="q8-card">
+        <div class="question-header">
+            <span class="q-num">Q8</span>
+            <div>울프(Wolf, 2012)가 가상 세계 구축(Building Imaginary Worlds)을 위해 제시한 세계관의 3대 요소 중, "세계 속 구성요소들이 서로 충돌하지 않는가?"를 측정하는 요소는 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q8" value="1"> Invention (새로움)</label>
+            </li>
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q8" value="2"> Completeness (완결성)</label>
+            </li>
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q8" value="3"> Consistency (일관성)</label>
+            </li>
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q8" value="4"> Interactivity (상호작용성)</label>
+            </li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(8, 3)">정답 확인</button>
+        <div class="feedback-box" id="feedback-8"></div>
+    </div>
+
+    <div class="question-card" id="q9-card">
+        <div class="question-header">
+            <span class="q-num">Q9</span>
+            <div>강의자료에서 게임의 줄거리(또는 시놉시스)를 작성할 때 포함해야 하는 핵심 요건 3가지로 설명한 것 중 옳지 않은 것은?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q9" value="1"> 하부 장르에 대해 확실하게 결정할 것 (퍼즐, 액션, 1인칭/3인칭 등)</label>
+            </li>
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q9" value="2"> 게임 내용의 시간, 공간적 배경이 반드시 담겨 있어야 한다.</label>
+            </li>
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q9" value="3"> 개발비용의 투자 규모와 손익분기점(BEP) 수치를 구체적으로 증명해야 한다.</label>
+            </li>
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q9" value="4"> 사건의 발단과 이후 진행과정을 포함하되, 너무 장황하지 않게 서술한다.</label>
+            </li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(9, 3)">정답 확인</button>
+        <div class="feedback-box" id="feedback-9"></div>
+    </div>
+
+    <div class="question-card" id="q10-card">
+        <div class="question-header">
+            <span class="q-num">Q10</span>
+            <div>강의자료(54페이지)에서는 간단한 퍼즐게임(예: 테트리스) 역시 특수한 줄거리를 부여해 해석할 수 있다고 명시했습니다. 자료에서 비유한 테트리스의 기획적 줄거리 해석은 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q10" value="1"> 우주에서 떨어지는 운석을 격파하는 외계 전쟁의 줄거리</label>
+            </li>
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q10" value="2"> 과중한 일에 시달리는 현대 직장인의 애환과 쏟아지는 일거리에 대한 압박</label>
+            </li>
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q10" value="3"> 중세 시대 성벽을 완벽하게 축조하여 영지를 방어하는 기사의 여정</label>
+            </li>
+            <li class="option-item">
+                <label class="option-label"><input type="radio" name="q10" value="4"> 고대 디지털 세계의 파편화된 데이터를 복구하기 위한 인공지능의 진화</label>
+            </li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(10, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-10"></div>
+    </div>
+
+
+    <div class="section-title">PART 2. 주관식 단답형 문항 (5문제)</div>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q11</span>
+            <div>강의자료 3~7페이지에서 강조한 내용으로, "누군가 좋아할 게임을 만든다"는 것은 목표 대상을 최대한 무어라 한다는 뜻인가? (자료에 표시된 빈칸의 핵심 단어를 쓰시오)</div>
+        </div>
+        <div class="text-input-container">
+            <input type="text" id="q11-input" class="short-answer-input" placeholder="정답을 입력하세요">
+        </div>
+        <button class="action-btn" onclick="checkShortAnswer(11, ['세분화', '대상을 세분화', '세분화한다'])">정답 확인</button>
+        <div class="feedback-box" id="feedback-11"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q12</span>
+            <div>내가 만든 게임의 주요 고객이 될 가상의 인물을 하나 설정하고 구체적인 취향과 특징을 부여하는 고객 분석 기법을 'OOOO 시나리오 만들기'라고 합니다. OOOO에 들어갈 용어를 쓰시오.</div>
+        </div>
+        <div class="text-input-container">
+            <input type="text" id="q12-input" class="short-answer-input" placeholder="정답을 입력하세요">
+        </div>
+        <button class="action-btn" onclick="checkShortAnswer(12, ['퍼소나', 'persona', '페르소나'])">정답 확인</button>
+        <div class="feedback-box" id="feedback-12"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q13</span>
+            <div>강의자료 46페이지에서 언급된 울프(Wolf, 2012)의 가상세계 구축의 3대 핵심 요소는 새로움(Invention), 완결성(Completeness), 그리고 이것(중요 요소들이 충돌하지 않음)입니다. 이것에 해당하는 영문 요소명을 쓰시오.</div>
+        </div>
+        <div class="text-input-container">
+            <input type="text" id="q13-input" class="short-answer-input" placeholder="정답을 입력하세요">
+        </div>
+        <button class="action-btn" onclick="checkShortAnswer(13, ['Consistency', 'consistency'])">정답 확인</button>
+        <div class="feedback-box" id="feedback-13"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q14</span>
+            <div>게임 기획의 체크리스트 중에서 '소재'와 '주제'의 결합이자, 전체 게임의 내용을 시간적/공간적 배경 및 사건의 발단을 포함하여 간략하게 설명한 요약문을 무엇이라고 부르는가? (강의자료에 명시된 기준 단어)</div>
+        </div>
+        <div class="text-input-container">
+            <input type="text" id="q14-input" class="short-answer-input" placeholder="정답을 입력하세요">
+        </div>
+        <button class="action-btn" onclick="checkShortAnswer(14, ['줄거리', '시놉시스'])">정답 확인</button>
+        <div class="feedback-box" id="feedback-14"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q15</span>
+            <div>강의자료 45페이지에 따르면, 게임의 정서와 배경의 일치성이 강조됩니다. 탈출의 과정과 같은 플레이어의 '고뇌'를 연출할 때는 아침보다 어떤 시간대 배경이 더 어울린다고 명시되어 있는가?</div>
+        </div>
+        <div class="text-input-container">
+            <input type="text" id="q15-input" class="short-answer-input" placeholder="정답을 입력하세요">
+        </div>
+        <button class="action-btn" onclick="checkShortAnswer(15, ['밤', '밤시간대', '밤 시간대'])">정답 확인</button>
+        <div class="feedback-box" id="feedback-15"></div>
+    </div>
+
+
+    <div class="section-title">PART 3. 주관식 서술형 문항 (2문제)</div>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q16</span>
+            <div><strong>[서술형]</strong> 톨킨(Tolkien, 1947)이 정의한 세계관 설계의 일관성 법칙인 '몰입의 계약'이란 무엇이며, 이 일관성이 깨졌을 때 게이머가 겪는 인지적 변화 현상을 강의 자료의 핵심 용어를 사용하여 설명하시오.</div>
+        </div>
+        <div class="text-input-container">
+            <textarea id="q16-input" class="essay-answer-input" placeholder="여기에 서술형 답안을 작성하세요. 작성 후 아래 버튼을 누르면 모범 답안 및 채점 핵심 가이드가 열립니다."></textarea>
+        </div>
+        <button class="action-btn" onclick="checkEssay(16)">작성 완료 및 피드백 보기</button>
+        <div class="feedback-box" id="feedback-16"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q17</span>
+            <div><strong>[서술형]</strong> 게임 기획에서 서사적 구조(스토리)를 명확히 만들기 어려운 아주 간단한 캐주얼 퍼즐 게임의 경우, 기획자가 줄거리(시놉시스) 항목에 기획자로서 디자이너나 팀원에게 공유하기 위해 무엇을 작성해야 하는지 자료를 기반으로 서술하시오.</div>
+        </div>
+        <div class="text-input-container">
+            <textarea id="q17-input" class="essay-answer-input" placeholder="여기에 서술형 답안을 작성하세요. 작성 후 아래 버튼을 누르면 모범 답안 및 채점 핵심 가이드가 열립니다."></textarea>
+        </div>
+        <button class="action-btn" onclick="checkEssay(17)">작성 완료 및 피드백 보기</button>
+        <div class="feedback-box" id="feedback-17"></div>
+    </div>
+
+    <div class="summary-box">
+        <h3>🎉 9주차 퀴즈 수행 결과 요약</h3>
+        <p>문제를 모두 풀고 정답 확인을 진행해 보세요!</p>
+        <div class="score-display" id="total-score-box">객관식/단답형 채점 대기 중</div>
+        <p style="font-size:12px; color:#666;">* 서술형 2문제는 하단의 모범답안 가이드라인을 참조하여 스스로 자가 채점을 진행해 주세요.</p>
+    </div>
+</main>
+
+<script>
+    // 각 문제별 해설 및 정답 맵 정의
+    const explanations = {
+        1: "강의자료 4페이지에 명시된 게임 시장의 기본 전제는 '시장은 넓고 구매자는 다양하다'입니다. 따라서 취향에 맞는 세분화가 필수적입니다.",
+        2: "대상을 세분화하는 목적은 취향 저격 및 높은 만족감 선사(4페이지)이며, 경쟁사 유치 노력 심화 및 고객 선호 다변화(7페이지) 대응 때문입니다. 독점 보장은 자료에 없습니다.",
+        3: "강의자료 5~6페이지의 '엔터테인먼트 3사 비유'에서 기획자가 자신이 좋아하는 것 위주로 공급하는 형태는 'YG 스타일'로 매칭되어 있습니다.",
+        4: "강의자료 9페이지에 따르면, 퍼소나 시나리오는 주요 고객이 될 가상의 인물을 하나 설정하고 특징을 부여하여 요구사항을 논리적으로 추리하는 도구입니다. 맹신은 금물이라고 명시되어 있습니다.",
+        5: "강의자료 19페이지에 따르면, 소재 설계 시 '무엇이 등장하는가'의 표층소재(재료 축)와 '게임이 어떻게 작동하는가'의 시스템 소재(규칙 축)를 함께 설계해야 합니다.",
+        6: "캐릭터나 비주얼 재료 자체를 뜻하는 것은 '소재(재료)'의 영역입니다. 주제(Theme)는 게임 안에 담긴 중심 사상, 핵심 내용, 목적, 구심점입니다(20페이지).",
+        7: "강의자료 46페이지에 명시된 대로, 플레이어가 2차 세계(secondary world)에 들어올 때 그 세계의 법칙을 잠시 신뢰한다는 묵시적 계약을 '몰입의 계약'이라고 부릅니다.",
+        8: "울프(Wolf, 2012)가 제시한 세계관의 3요소 중 세계 속 구성요소들이 충돌하지 않는 상태는 'Consistency(일관성)'입니다(46페이지).",
+        9: "줄거리(시놉시스) 구성 요건에는 하부 장르 결정, 시공간적 배경 포함, 사건 발단과 진행과정이 포함되어야 합니다(53페이지). 개발 비용이나 손익분기점은 시놉시스의 서사 조건이 아닙니다.",
+        10: "강의자료 54~55페이지에 따르면, 테트리스는 '과중한 일에 시달리는 현대 직장인의 애환과 쏟아지는 일거리에 대한 압박'이라는 고유의 줄거리로 해석되어 몰입감을 증대할 수 있다고 명시되어 있습니다.",
+        11: "강의자료 3~7페이지 전체에 걸쳐 빈칸 및 키워드로 강조된 정답은 '세분화'입니다.",
+        12: "가상의 고객 타겟 모델을 지정하여 취향을 추리하는 기법의 명칭은 '퍼소나(Persona)'입니다(9페이지).",
+        13: "울프가 정의한 세계관 일관성의 영어 명칭은 'Consistency'입니다(46페이지).",
+        14: "전체 게임 내용을 시공간 배경과 함께 간략하게 설명한 것은 '줄거리' 또는 '시놉시스'입니다(53페이지).",
+        15: "강의자료 45페이지에 따르면 슈팅(복수)이나 탈출의 과정(고뇌)의 시간적 연출 배경으로는 '밤'이 올바릅니다.",
+        16: {
+            modelAnswer: "<b>[모범 답안]</b> '몰입의 계약'이란 게이머가 게임 속 가상세계(Secondary World)에 들어갈 때 그 세계의 독자적인 법칙을 잠시 신뢰한다는 묵시적 약속입니다. 만약 세계관의 일관성이 파열되면, 게이머는 몰입에 실패하고 '이건 게임일 뿐'이라는 현실세계(Primary World)의 인식으로 강제 복귀하게 됩니다.",
+            keywords: ["가상세계", "Secondary World", "법칙", "신뢰", "일관성", "Primary World", "현실세계"]
+        },
+        17: {
+            modelAnswer: "<b>[모범 답안]</b> 서사구조를 딱히 만들기 어려운 간단한 캐주얼 퍼즐 게임의 경우, 줄거리 항목에 게임이 요구하는 '수행과제(또는 플레이 규칙 및 메커니즘)'를 간단하게 설명하여 작성해야 합니다. (자료 예시: 초록색 동그라미를 맞추면 공이 늘어나고 벽돌 숫자만큼 공을 맞혀 벽돌을 깨트리는 방식 등 설명)",
+            keywords: ["수행과제", "설명", "규칙", "퍼즐"]
+        }
+    };
+
+    let scoreCard = {};
+
+    function checkMultipleChoice(qNum, correctVal) {
+        const selected = document.querySelector(`input[name="q${qNum}"]:checked`);
+        const feedback = document.getElementById(`feedback-${qNum}`);
+        
+        if (!selected) {
+            alert("보기를 선택해 주세요!");
+            return;
+        }
+
+        if (parseInt(selected.value) === correctVal) {
+            feedback.className = "feedback-box correct";
+            feedback.innerHTML = `<div class="explanation-title">⭕ 정답입니다!</div><div class="explanation-content">${explanations[qNum]}</div>`;
+            scoreCard[qNum] = true;
+        } else {
+            feedback.className = "feedback-box incorrect";
+            feedback.innerHTML = `<div class="explanation-title">❌ 오답입니다. (정답: ${correctVal}번)</div><div class="explanation-content">${explanations[qNum]}</div>`;
+            scoreCard[qNum] = false;
+        }
+        updateSummary();
+    }
+
+    function checkShortAnswer(qNum, correctArray) {
+        const userInput = document.getElementById(`q${qNum}-input`).value.trim().toLowerCase();
+        const feedback = document.getElementById(`feedback-${qNum}`);
+
+        if (!userInput) {
+            alert("답안을 입력해 주세요!");
+            return;
+        }
+
+        let isCorrect = correctArray.some(ans => userInput.includes(ans.toLowerCase()));
+
+        if (isCorrect) {
+            feedback.className = "feedback-box correct";
+            feedback.innerHTML = `<div class="explanation-title">⭕ 정답입니다!</div><div class="explanation-content">${explanations[qNum]}</div>`;
+            scoreCard[qNum] = true;
+        } else {
+            feedback.className = "feedback-box incorrect";
+            feedback.innerHTML = `<div class="explanation-title">❌ 오답입니다. (인정 정답 범위: ${correctArray.join(', ')})</div><div class="explanation-content">${explanations[qNum]}</div>`;
+            scoreCard[qNum] = false;
+        }
+        updateSummary();
+    }
+
+    function checkEssay(qNum) {
+        const userInput = document.getElementById(`q${qNum}-input`).value.trim();
+        const feedback = document.getElementById(`feedback-${qNum}`);
+
+        if (!userInput) {
+            alert("내용을 입력한 후 피드백을 확인하세요!");
+            return;
+        }
+
+        const data = explanations[qNum];
+        let matchedKeywords = [];
+        data.keywords.forEach(kw => {
+            if (userInput.toLowerCase().includes(kw.toLowerCase())) {
+                matchedKeywords.push(kw);
+            }
+        });
+
+        feedback.className = "feedback-box essay-feedback";
+        feedback.innerHTML = `
+            <div class="explanation-title">📝 서술형 채점 가이드 및 가답안</div>
+            <div class="explanation-content">
+                ${data.modelAnswer}
+                <br><br>
+                <b>[자가 채점 필수 키워드 매칭결과]</b><br>
+                - 현재 작성하신 답안 내 포함된 핵심 키워드: <span style="color:blue; font-weight:bold;">[${matchedKeywords.join(', ')}]</span> (총 ${data.keywords.length}개 중 ${matchedKeywords.length}개 발견)<br>
+                - 누락된 키워드가 있다면 모범 답안을 바탕으로 개념을 재점검해 보세요!
+            </div>
+        `;
+    }
+
+    function updateSummary() {
+        let score = 0;
+        let totalChecked = 0;
+        for (let i = 1; i <= 15; i++) {
+            if (scoreCard[i] !== undefined) {
+                totalChecked++;
+                if (scoreCard[i] === true) score++;
+            }
+        }
+        
+        const summaryBox = document.getElementById("total-score-box");
+        summaryBox.innerHTML = `현재 확인 완료된 문제: ${totalChecked}/15 문항<br>객관식 및 단답형 스코어: <span style="color:var(--error-color); font-size:28px;">${score}</span> / 15 점`;
+    }
+</script>
+
+</body>
+</html>
+
+```
