@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAU 게임기획 12주차 학습 평가 시스템</title>
+    <style>
+        :root {
+            --primary-color: #004b93;
+            --secondary-color: #f4f7fa;
+            --accent-color: #e28743;
+            --success-color: #2e7d32;
+            --error-color: #c62828;
+            --text-dark: #2c3e50;
+            --border-color: #dcdde1;
+        }
+
+        body {
+            font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+            background-color: #f8f9fa;
+            color: var(--text-dark);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        header p {
+            margin: 5px 0 0 0;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* 주차별 이동 버튼 컨테이너 */
+        .nav-container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 0 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .nav-btn {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 8px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #555;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn:hover {
+            background-color: #eee;
+            border-color: #999;
+        }
+
+        .nav-btn.active {
+            background-color: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        }
+
+        /* 메인 콘텐츠 */
+        main {
+            max-width: 850px;
+            margin: 0 auto 50px auto;
+            padding: 0 15px;
+        }
+
+        .quiz-intro {
+            background-color: white;
+            border-left: 5px solid var(--primary-color);
+            padding: 15px 20px;
+            margin-bottom: 30px;
+            border-radius: 0 8px 8px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .section-title {
+            font-size: 18px;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 6px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        /* 문제 카드 스타일 */
+        .question-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border: 1px solid #eef0f2;
+        }
+
+        .question-header {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .q-num {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 4px;
+            padding: 2px 8px;
+            font-size: 12px;
+            margin-right: 10px;
+            white-space: nowrap;
+            margin-top: 2px;
+        }
+
+        /* 객관식 보기 스타일 */
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 15px 0;
+        }
+
+        .option-item {
+            margin-bottom: 10px;
+        }
+
+        .option-label {
+            display: block;
+            background-color: #fdfdfd;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 12px 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14.5px;
+        }
+
+        .option-label:hover {
+            background-color: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+
+        .option-item input[type="radio"] {
+            margin-right: 10px;
+            transform: scale(1.1);
+            vertical-align: middle;
+        }
+
+        /* 단답형/서술형 입력 */
+        .text-input-container {
+            margin-bottom: 15px;
+        }
+
+        .short-answer-input {
+            width: 100%;
+            max-width: 400px;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 14.5px;
+            box-sizing: border-box;
+        }
+
+        .essay-answer-input {
+            width: 100%;
+            height: 120px;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 14.5px;
+            resize: vertical;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+
+        /* 결과 확인 버튼 */
+        .action-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .action-btn:hover {
+            background-color: #00366b;
+        }
+
+        /* 피드백 및 해설박스 */
+        .feedback-box {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 6px;
+            display: none;
+            font-size: 14px;
+        }
+
+        .feedback-box.correct {
+            display: block;
+            background-color: #e8f5e9;
+            border-left: 5px solid var(--success-color);
+            color: #1b5e20;
+        }
+
+        .feedback-box.incorrect {
+            display: block;
+            background-color: #ffebee;
+            border-left: 5px solid var(--error-color);
+            color: #b71c1c;
+        }
+
+        .feedback-box.essay-feedback {
+            display: block;
+            background-color: #fff8e1;
+            border-left: 5px solid #ffb300;
+            color: #5d4037;
+        }
+
+        .explanation-title {
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .explanation-content {
+            margin-top: 5px;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        /* 점수 요약 하단 바 */
+        .summary-box {
+            background-color: white;
+            border: 2px solid var(--primary-color);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin-top: 40px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .summary-box h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+
+        .score-display {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--accent-color);
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>중앙대학교 게임기획 학습 평가 시스템</h1>
+    <p>12주차 강의자료 기반 심화 자가 진단 평가 (사지선다 20문항 + 단답형 10문항 + 서술형 3문항)</p>
+</header>
+
+<div class="nav-container">
+    <button class="nav-btn" onclick="location.href='index.html';">9주차</button>
+    <button class="nav-btn" onclick="location.href='10.html';">10주차</button>
+    <button class="nav-btn" onclick="location.href='11.html';">11주차</button>
+    <button class="nav-btn active" onclick="location.reload();">12주차</button>
+    <button class="nav-btn disabled" onclick="alert('13주차 자료는 다음 세션에서 활성화됩니다.')">13주차</button>
+    <button class="nav-btn disabled" onclick="alert('14주차 자료는 다음 세션에서 활성화됩니다.')">14주차</button>
+</div>
+
+<main>
+    <div class="quiz-intro">
+        <strong>💡 12주차 심화 평가 안내:</strong> 본 퀴즈는 12주차 범위의 핵심 기획 메커니즘을 총망라하고 있습니다. 게임 시스템 디자인의 코어 루프 설정법, 수치 밸런싱의 원리와 경제 인플레이션 제어, 보상 테이블 설계 구조 및 UI/UX 인터페이스 터치 가이드라인과 맵 연출 설계 공식을 다룹니다.
+    </div>
+
+    <div class="section-title">PART 1. 사지선다형 객관식 문항 (20문제)</div>
+
+    <div class="question-card" id="q1-card">
+        <div class="question-header">
+            <span class="q-num">Q1</span>
+            <div>게임 기획에서 '코어 루프(Core Loop)'가 가지는 정의와 역할로 가장 올바른 것은 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q1" value="1"> 게임 플레이어가 가장 처음 보게 되는 타이틀 화면의 그래픽 연출 주기</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q1" value="2"> 플레이어가 게임을 지속하게 만드는 가장 기본적이고 반복적인 '행동-보상-성장'의 순환 구조</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q1" value="3"> 서버 엔진에서 클라이언트 데이터를 동기화하기 위해 소요되는 물리적 연산 루프</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q1" value="4"> 게임 시나리오의 도입부와 결말부를 강제로 일치시키는 서사적 순환 장치</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(1, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-1"></div>
+    </div>
+
+    <div class="question-card" id="q2-card">
+        <div class="question-header">
+            <span class="q-num">Q2</span>
+            <div>다음 중 코어 루프의 3대 핵심 체인으로 묶이는 '행동(Action) - 보상(Reward) - 성장(Growth)'의 흐름 메커니즘과 일치하지 않는 것은?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q2" value="1"> 던전 사냥(행동)을 수행하면 경험치와 장비(보상)를 획득한다.</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q2" value="2"> 획득한 보상으로 레벨업과 스탯 강화(성장)를 단행한다.</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q2" value="3"> 성장한 캐릭터로 더 높은 난이도의 던전 사냥(더 큰 행동)에 도전한다.</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q2" value="4"> 자원이 포화되면 시스템 초기화(리셋)를 통해 유저의 성장 데이터를 전면 삭제한다.</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(2, 4)">정답 확인</button>
+        <div class="feedback-box" id="feedback-2"></div>
+    </div>
+
+    <div class="question-card" id="q3-card">
+        <div class="question-header">
+            <span class="q-num">Q3</span>
+            <div>게임 시스템에서 자원의 '생산(Source)'과 '소비(Sink)' 밸런싱이 붕괴하여 게임 내 가치가 폭락하고 경제 시스템이 마비되는 현상을 뜻하는 용어는?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q3" value="1"> 디플레이션 (Deflation)</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q3" value="2"> 인플레이션 (Inflation)</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q3" value="3"> 경제 안정화 (Stabilization)</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q3" value="4"> 리소스 덤핑 (Resource Dumping)</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(3, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-3"></div>
+    </div>
+
+    <div class="question-card" id="q4-card">
+        <div class="question-header">
+            <span class="q-num">Q4</span>
+            <div>인게임 재화의 과도한 누적을 막기 위해 기획자가 설계해야 하는 가장 대표적인 '자원 소비처(Sink)' 시스템의 예시가 아닌 것은?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q4" value="1"> 장비 강화 시 소모되는 골드 및 강화석 피드백 수수료</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q4" value="2"> 물약이나 소모성 버프 아이템을 구매하는 상점 시스템</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q4" value="3"> 던전 클리어 시 유저에게 무상으로 지급하는 확정 기본 재화보상</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q4" value="4"> 높은 레벨의 길드를 창설하거나 유지할 때 지불하는 커뮤니티 세금</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(4, 3)">정답 확인</button>
+        <div class="feedback-box" id="feedback-4"></div>
+    </div>
+
+    <div class="question-card" id="q5-card">
+        <div class="question-header">
+            <span class="q-num">Q5</span>
+            <div>아이템 보상 테이블을 설계할 때 유저가 상위 아이템을 획득하기 위해 하위 등급 재료를 모아 업그레이드하도록 유도하는 자원 순환 시스템은?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q5" value="1"> 가챠(Gacha) 시스템</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q5" value="2"> 제작 및 합성(Crafting) 시스템</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q5" value="3"> 경매장 우회 대기 시스템</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q5" value="4"> 드롭율 실시간 자동 차등 장치</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(5, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-5"></div>
+    </div>
+
+    <div class="question-card" id="q6-card">
+        <div class="question-header">
+            <span class="q-num">Q6</span>
+            <div>유저 인터페이스(UI) 기획 시 스마트폰 화면에서 오른손잡이 유저가 한 손으로 폰을 쥐었을 때 가장 엄지손가락이 빠르고 편리하게 닿는 '가장 효율적인 터치 영역'은 대략 어디인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q6" value="1"> 화면의 최상단 좌측 모서리 영역</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q6" value="2"> 화면의 최상단 우측 설정 버튼 영역</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q6" value="3"> 화면의 중앙 우측 및 하단 우측 반원 형태 영역</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q6" value="4"> 화면의 정중앙 가장 깊숙한 핵심 데드존 영역</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(6, 3)">정답 확인</button>
+        <div class="feedback-box" id="feedback-6"></div>
+    </div>
+
+    <div class="question-card" id="q7-card">
+        <div class="question-header">
+            <span class="q-num">Q7</span>
+            <div>모바일 UI/UX 기획에서 화면 왼쪽 상단(Top-Left) 구석에 주로 배치하는 고정 컴포넌트 정보는 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q7" value="1"> 전투 시 가장 자주 사용하는 메인 공격/스킬 스킬 패드</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q7" value="2"> 상점 유료 결제 바로가기 배너 및 랭킹 탭</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q7" value="3"> 플레이어의 캐릭터 프로필 상태창(HP/MP) 및 레벨 정보</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q7" value="4"> 게임을 종료하거나 로그아웃하는 시스템 제어 환경설정 메뉴</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(7, 3)">정답 확인</button>
+        <div class="feedback-box" id="feedback-7"></div>
+    </div>
+
+    <div class="question-card" id="q8-card">
+        <div class="question-header">
+            <span class="q-num">Q8</span>
+            <div>장치 및 시스템 디자인에서 유저가 어떠한 조작 힌트를 보지 않더라도 행동의 목적과 조작법을 본능적으로 인지하게 만드는 '직관적 유도성'을 뜻하는 디자인 용어는 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q8" value="1"> 어포던스 (Affordance)</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q8" value="2"> 피드백 사이클 (Feedback Cycle)</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q8" value="3"> 와이어프레임 가이드 (Wireframe)</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q8" value="4"> 멘탈 맵 왜곡 (Mental Mapping)</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(8, 1)">정답 확인</button>
+        <div class="feedback-box" id="feedback-8"></div>
+    </div>
+
+    <div class="question-card" id="q9-card">
+        <div class="question-header">
+            <span class="q-num">Q9</span>
+            <div>맵 및 환경 연출 기획에서 유저가 가야 할 올바른 동선이나 문, 통로 등으로 시선을 집중시키기 위해 기획자가 가장 효과적으로 사용할 수 있는 환경 연출 트리거는 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q9" value="1"> 맵 전체의 텍스처 해상도를 일괄적으로 다운그레이드한다.</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q9" value="2"> 빛(조명)의 배치 및 카메라 구도의 방향을 통해 시각적 시선을 유도한다.</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q9" value="3"> 미니맵의 위치를 오른쪽 하단에서 정중앙으로 강제 이동시킨다.</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q9" value="4"> 텍스트 팝업 경고창을 화면 전체에 무한 반복 팝업한다.</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(9, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-9"></div>
+    </div>
+
+    <div class="question-card" id="q10-card">
+        <div class="question-header">
+            <span class="q-num">Q10</span>
+            <div>레벨 디자인에서 플레이어의 이동 속도, 점프 높이, 대시 거리 등의 수치적 변수들을 정의하고 제한하여 맵의 규격을 산정하는 단계를 무엇이라 하는가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q10" value="1"> 시네마틱 컷씬 연출</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q10" value="2"> 메트릭 데이터 설정 (Metrics)</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q10" value="3"> 텍스처 매핑 밸런싱</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q10" value="4"> 서버 부하 수용치 예측</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(10, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-10"></div>
+    </div>
+
+    <div class="question-card" id="q11-card">
+        <div class="question-header">
+            <span class="q-num">Q11</span>
+            <div>수치 밸런싱 설계 시 게임 난이도가 유저의 실력 상승 곡선보다 완만하게 상승하여 유저가 느끼는 긴장감이 소멸할 때 발생하는 심리적 상태는?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q11" value="1"> 극도의 좌절감 및 분노</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q11" value="2"> 지루함 및 몰입도 저하</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q11" value="3"> 최적의 몰입 상태 (Flow)</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q11" value="4"> 강박적 도전 욕구 폭발</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(11, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-11"></div>
+    </div>
+
+    <div class="question-card" id="q12-card">
+        <div class="question-header">
+            <span class="q-num">Q12</span>
+            <div>반대로, 유저의 장비나 실력은 그대로인데 요구되는 적들의 능력치나 스테이지 허들이 지나치게 수직 상승할 때 게이머가 겪는 심리 변화는?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q12" value="1"> 성취감 고취</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q12" value="2"> 좌절감 및 이탈 현상</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q12" value="3"> 지루함 발생</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q12" value="4"> 안도감 유도</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(12, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-12"></div>
+    </div>
+
+    <div class="question-card" id="q13-card">
+        <div class="question-header">
+            <span class="q-num">Q13</span>
+            <div>보상 경제 시스템 설계 시 유저들에게 매일 특정 미션을 부여하여 정기적인 게임 접속(Retention)을 유지시키는 시스템의 명칭은?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q13" value="1"> 히든 퀘스트 보상</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q13" value="2"> 일일 퀘스트 / 일일 미션 시스템</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q13" value="3"> 엔드게임 무한 레이드</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q13" value="4"> 계정 영구 업적 연동</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(13, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-13"></div>
+    </div>
+
+    <div class="question-card" id="q14-card">
+        <div class="question-header">
+            <span class="q-num">Q14</span>
+            <div>UI 디자인의 배치 공식 중 유저가 화면 정보를 인지할 때 시선이 좌측 상단에서 시작하여 우측 상단, 좌측 하단, 우측 하단 순서로 흘러간다는 시선 이동 이론은 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q14" value="1"> X 자 형태 이동 법칙</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q14" value="2"> Z 패턴 / F 패턴 시선 이동 법칙</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q14" value="3"> O 원형 집중 법칙</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q14" value="4"> 버티컬 수직 수렴 법칙</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(14, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-14"></div>
+    </div>
+
+    <div class="question-card" id="q15-card">
+        <div class="question-header">
+            <span class="q-num">Q15</span>
+            <div>UX 설계에서 유저가 어떠한 버튼이나 타일을 클릭했을 때 데이터 처리 중임을 알려 몰입 파열을 예방하는 시각적 인터랙션 효과의 예시가 아닌 것은?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q15" value="1"> 버튼을 누를 때 안쪽으로 살짝 들어가는 크기 스케일 애니메이션</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q15" value="2"> 클릭과 동시에 출력되는 딸깍하는 사운드 이펙트 피드백</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q15" value="3"> 어떠한 반응이나 로딩 그래픽 표현 없이 화면을 영구 동결시키는 현상</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q15" value="4"> 로딩 상황을 시각화하는 모래시계 혹은 프로그레스 바(Progress Bar) 노출</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(15, 3)">정답 확인</button>
+        <div class="feedback-box" id="feedback-15"></div>
+    </div>
+
+    <div class="question-card" id="q16-card">
+        <div class="question-header">
+            <span class="q-num">Q16</span>
+            <div>보상과 소비의 선순환 구조에서 한정적인 인게임 특수 자원을 소모하여 유저의 창고 인벤토리 슬롯 한도를 영구적으로 넓혀주도록 유도하는 기획적 목적은 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q16" value="1"> 유저층을 차단하여 랭커 유저들만 수용하기 위함</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q16" value="2"> 인플레이션을 억제하기 위한 강력하고 지속적인 자원의 소비처(Sink) 장치로 활용</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q16" value="3"> 아이템 드롭율을 전산 상으로 전면 낮추기 위한 전제 조건</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q16" value="4"> 게임 클라이언트 서버 용량을 강제로 확보하기 위한 아키텍처 조건</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(16, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-16"></div>
+    </div>
+
+    <div class="question-card" id="q17-card">
+        <div class="question-header">
+            <span class="q-num">Q17</span>
+            <div>레벨 디자인 환경 구성 중 플레이어에게 은엄폐를 제공하거나 시야를 가려 전략적인 기습 동선을 만들어 내는 불투명 3D 구조물 오브젝트의 통칭은 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q17" value="1"> 스카이박스 (Skybox)</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q17" value="2"> 오클루더 및 엄폐물 오브젝트 (Cover)</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q17" value="3"> 콜라이더 배제 충돌 영역 (Non-Collider)</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q17" value="4"> 웨이포인트 노드 데이터 (Waypoint)</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(17, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-17"></div>
+    </div>
+
+    <div class="question-card" id="q18-card">
+        <div class="question-header">
+            <span class="q-num">Q18</span>
+            <div>유저 인터페이스에 배치하는 '아이콘(Icon)' 이미지를 기획할 때 가장 최우선으로 지켜야 하는 조건은 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q18" value="1"> 복잡하고 현란한 3D 하이퍼 리얼리즘 묘사</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q18" value="2"> 텍스트 캡션 없이도 직관적으로 어떠한 기능(예: 칼=공격, 가방=인벤토리)인지 즉각 인지할 수 있는 가시성</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q18" value="3"> 마법 스킬 아이콘과 일반 검 공격 아이콘의 색상을 완전히 똑같이 통일하는 일치성</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q18" value="4"> 트렌디한 타이포그래피 문장으로만 가득 채우는 서사성</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(18, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-18"></div>
+    </div>
+
+    <div class="question-card" id="q19-card">
+        <div class="question-header">
+            <span class="q-num">Q19</span>
+            <div>게임 밸런싱 작업 단계 중 사내 QA 개발팀이나 전문 게임 테스트 인력이 모여 수치 변경값의 재미 요소 및 버그 유무를 정밀하게 교정하는 테스트 단계는?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q19" value="1"> 마케팅 포지셔닝 분석</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q19" value="2"> FGT(Focus Group Test) 및 사내 인하우스 포커스 밸런스 테스트</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q19" value="3"> 글로벌 퍼블릭 크라우드 마케팅 런칭</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q19" value="4"> 서버 하드웨어 내구 한계 측정</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(19, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-19"></div>
+    </div>
+
+    <div class="question-card" id="q20-card">
+        <div class="question-header">
+            <span class="q-num">Q20</span>
+            <div>코어 루프와 연계된 보상 경제학에서 유저가 유료 결제를 단행하지 않더라도, 순수 인게임 플레이 시간과 유저간 협동(레이드 등)만으로 최상위 장비를 파밍하여 순환 체인을 완성시키는 기획적 메커니즘 모델은?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q20" value="1"> 페이 투 윈 (Pay to Win) 모델</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q20" value="2"> 플레이 투 언 (Play to Earn) 블록체인 모델</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q20" value="3"> 인게임 플레이 기반 파밍 가치 순환 (Play-driven 파밍) 모델</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q20" value="4"> 무조건 확률형 랜덤 박스 컴플리트 가차 모델</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(20, 3)">정답 확인</button>
+        <div class="feedback-box" id="feedback-20"></div>
+    </div>
+
+
+    <div class="section-title">PART 2. 주관식 단답형 문항 (10문제)</div>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q21</span>
+            <div>게임 내 경제 시스템에서 재화와 아이템이 시스템에 의해 무한정 생성 및 유입되는 근원지를 뜻하는 용어를 영문(4글자)으로 쓰시오.</div>
+        </div>
+        <div class="text-input-container"><input type="text" id="q21-input" class="short-answer-input" placeholder="정답을 입력하세요"></div>
+        <button class="action-btn" onclick="checkShortAnswer(21, ['source', '소스'])">정답 확인</button>
+        <div class="feedback-box" id="feedback-21"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q22</span>
+            <div>반대로 시스템 내에서 누적된 재화를 강화 확률, 수수료, 아이템 구매 등으로 영구 소멸시키는 자원 소모처를 뜻하는 영문 용어(4글자)를 쓰시오.</div>
+        </div>
+        <div class="text-input-container"><input type="text" id="q22-input" class="short-answer-input" placeholder="정답을 입력하세요"></div>
+        <button class="action-btn" onclick="checkShortAnswer(22, ['sink', '싱크'])">정답 확인</button>
+        <div class="feedback-box" id="feedback-22"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q23</span>
+            <div>플레이어가 가상 세계관의 규칙 속에서 수행하는 가장 기초적인 순환 연결고리 체인인 '행동-보상-성장'의 매커니즘을 뜻하는 핵심 개념어(영문 또는 한글)는 무엇인가?</div>
+        </div>
+        <div class="text-input-container"><input type="text" id="q23-input" class="short-answer-input" placeholder="정답을 입력하세요"></div>
+        <button class="action-btn" onclick="checkShortAnswer(23, ['코어루프', '코어 루프', 'core loop'])">정답 확인</button>
+        <div class="feedback-box" id="feedback-23"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q24</span>
+            <div>디자인 유도성을 지칭하는 용어로 물리적인 버튼 모양의 입체감을 보고 유저가 마우스로 클릭하는 동작을 본능적으로 인지하게 만드는 현상을 무엇이라 하는가?</div>
+        </div>
+        <div class="text-input-container"><input type="text" id="q24-input" class="short-answer-input" placeholder="정답을 입력하세요"></div>
+        <button class="action-btn" onclick="checkShortAnswer(24, ['어포던스', 'affordance', '행동유도성'])">정답 확인</button>
+        <div class="feedback-box" id="feedback-24"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q25</span>
+            <div>UI/UX 인터페이스 설계 전에 화면 컴포넌트들의 위치와 크기 레이아웃을 선과 상자로 간단하게 구조화하여 팀원과 소통하는 초안 가이드라인 문서를 무엇이라 부르는가?</div>
+        </div>
+        <div class="text-input-container"><input type="text" id="q25-input" class="short-answer-input" placeholder="정답을 입력하세요"></div>
+        <button class="action-btn" onclick="checkShortAnswer(25, ['와이어프레임', 'wireframe', '스토리보드'])">정답 확인</button>
+        <div class="feedback-box" id="feedback-25"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q26</span>
+            <div>칙센트미하이의 몰입 이론에 등장하는 개념으로, 유저의 실력 수준과 게임의 난이도가 완벽하게 비례하여 게이머가 지루함이나 좌절감을 느끼지 않는 이상적인 상태 영역을 무엇이라 하는가? (한글 기준 2글자 또는 영문)</div>
+        </div>
+        <div class="text-input-container"><input type="text" id="q26-input" class="short-answer-input" placeholder="정답을 입력하세요"></div>
+        <button class="action-btn" onclick="checkShortAnswer(26, ['몰입', 'flow', '플로우'])">정답 확인</button>
+        <div class="feedback-box" id="feedback-26"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q27</span>
+            <div>플레이어가 캐릭터 능력치를 강제로 업그레이드하거나 특수 장비를 제작할 수 있도록 유도하는 시스템으로 하위 아이템을 섞는 시스템을 'OO 및 합성' 시스템이라고 합니다. 빈칸을 채우시오.</div>
+        </div>
+        <div class="text-input-container"><input type="text" id="q27-input" class="short-answer-input" placeholder="정답을 입력하세요"></div>
+        <button class="action-btn" onclick="checkShortAnswer(27, ['제작', '아이템제작', 'crafting'])">정답 확인</button>
+        <div class="feedback-box" id="feedback-27"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q28</span>
+            <div>레벨 디자인 metrics 기준 단계에서 유저 캐릭터가 점프했을 때 밟을 수 있는 공간적 디딤돌이나 점프 이동 허들 규격을 지칭하는 물리적인 단어는 무엇인가?</div>
+        </div>
+        <div class="text-input-container"><input type="text" id="q28-input" class="short-answer-input" placeholder="정답을 입력하세요"></div>
+        <button class="action-btn" onclick="checkShortAnswer(28, ['발판', '플랫폼', 'platform'])">정답 확인</button>
+        <div class="feedback-box" id="feedback-28"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q29</span>
+            <div>모바일 게임 유저 인터페이스 구성요소 중 오른손잡이 유저의 한 손 조작성을 위해 엄지손가락 범위에 공격과 점프 버튼을 크게 모아놓은 패드 컨트롤러 영역의 명칭은 무엇인가?</div>
+        </div>
+        <div class="text-input-container"><input type="text" id="q29-input" class="short-answer-input" placeholder="정답을 입력하세요"></div>
+        <button class="action-btn" onclick="checkShortAnswer(29, ['스킬패드', '가상패드', '액션패드', '조이패드'])">정답 확인</button>
+        <div class="feedback-box" id="feedback-29"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q30</span>
+            <div>유저가 아이템 상자나 몬스터 사냥 성공 시 각각의 확률에 따라 아이템이 리스트업되어 지급되도록 기획자가 설계하는 엑셀 수치 표 항목을 무엇이라 하는가?</div>
+        </div>
+        <div class="text-input-container"><input type="text" id="q30-input" class="short-answer-input" placeholder="정답을 입력하세요"></div>
+        <button class="action-btn" onclick="checkShortAnswer(30, ['보상테이블', '보상 테이블', '드롭테이블', 'drop table'])">정답 확인</button>
+        <div class="feedback-box" id="feedback-30"></div>
+    </div>
+
+
+    <div class="section-title">PART 3. 주관식 서술형 문항 (3문제)</div>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q31</span>
+            <div><strong>[서술형]</strong> 게임 내 경제 및 수치 밸런싱 기획에서 자원의 생산처(Source)와 소비처(Sink)의 상호 인과율 관계를 정밀하게 맞추어야 하는 이유와, 이 조절에 실패하여 생산이 소비를 과도하게 압도했을 때 발생하는 인게임 부작용 현상에 대해 상세히 기술하시오.</div>
+        </div>
+        <div class="text-input-container"><textarea id="q31-input" class="essay-answer-input" placeholder="여기에 서술형 답안을 작성하세요. 작성 후 아래 버튼을 누르면 모범 답안 및 채점 핵심 가이드가 열립니다."></textarea></div>
+        <button class="action-btn" onclick="checkEssay(31)">작성 완료 및 피드백 보기</button>
+        <div class="feedback-box" id="feedback-31"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q32</span>
+            <div><strong>[서술형]</strong> 모바일 스마트폰 게임 환경의 특성에 따른 UI/UX 기획 가이드라인과 관련하여, 유저의 오른손 엄지손가락 터치 범위의 한계성을 고려한 주요 인터페이스 컴포넌트(상태창, 환경설정, 스킬 패드 등)의 올바른 공간 배치 구조 법칙을 논리적으로 서술하시오.</div>
+        </div>
+        <div class="text-input-container"><textarea id="q32-input" class="essay-answer-input" placeholder="여기에 서술형 답안을 작성하세요. 작성 후 아래 버튼을 누르면 모범 답안 및 채점 핵심 가이드가 열립니다."></textarea></div>
+        <button class="action-btn" onclick="checkEssay(32)">작성 완료 및 피드백 보기</button>
+        <div class="feedback-box" id="feedback-32"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q33</span>
+            <div><strong>[서술형]</strong> 레벨 디자인 맵 연출 가이드에서 텍스트 경고창이나 미니맵의 강제 개입 없이, 오직 인게임 환경(Environment) 오브젝트 연출 및 카메라 메커니즘만을 유기적으로 제어하여 게이머의 직관적 시선과 동선을 안전하게 목표 구역으로 유도하는 구체적 기획 방법론들을 서술하시오.</div>
+        </div>
+        <div class="text-input-container"><textarea id="q33-input" class="essay-answer-input" placeholder="여기에 서술형 답안을 작성하세요. 작성 후 아래 버튼을 누르면 모범 답안 및 채점 핵심 가이드가 열립니다."></textarea></div>
+        <button class="action-btn" onclick="checkEssay(33)">작성 완료 및 피드백 보기</button>
+        <div class="feedback-box" id="feedback-33"></div>
+    </div>
+
+    <div class="summary-box">
+        <h3>🎉 12주차 퀴즈 수행 결과 요약</h3>
+        <p>문제를 모두 풀고 정답 확인을 진행해 보세요!</p>
+        <div class="score-display" id="total-score-box">객관식/단답형 채점 대기 중</div>
+        <p style="font-size:12px; color:#666;">* 주관식 서술형 3문제는 하단의 모범답안 가이드라인을 참조하여 스스로 자가 채점을 진행해 주세요.</p>
+    </div>
+</main>
+
+<script>
+    // 각 문제별 해설 및 정답 맵 정의
+    const explanations = {
+        1: "코어 루프(Core Loop)는 게이머가 플레이 과정에서 계속 반복 마주하게 되는 행동-보상-성장의 최소 단위 순환 구조 루프 시스템입니다.",
+        2: "자원이 누적된다고 해서 무작정 유저 데이터를 강제 리셋 및 전면 삭제하는 것은 잘못된 연출이며 이탈의 주원인이 됩니다.",
+        3: "재화 유입이 과도하게 증가하고 자원 소비가 마비되면 화폐의 가치가 폭락하는 인플레이션(Inflation) 경제학 붕괴가 초래됩니다.",
+        4: "던전 클리어 시 확정 지급하는 기본 보상은 재화의 생성처(Source)의 대표적인 메커니즘 시스템 예시입니다.",
+        5: "제작 및 합성(Crafting) 시스템은 하위 등급 재료들의 누적 지표를 지워 상위 가치 아이템으로 순환 압축하는 핵심 소비 통제 모델입니다.",
+        6: "한 손으로 스마트폰을 쥘 때 엄지손가락 반경에 들어오는 화면 중앙 우측 및 하단 우측 반원 라인이 최적의 고효율 터치 입력 구역입니다.",
+        7: "화면 왼쪽 상단(Top-Left)은 시선 이동 법칙 상 정보를 먼저 수용하는 구역이므로 캐릭터의 상태창(HP/MP)과 프로필 배치를 배정하는 것이 정석입니다.",
+        8: "어포던스(Affordance)란 사물이나 인터페이스가 별도의 인지 힌트 없이도 직관적으로 사용자로 하여금 특정 행동을 취하도록 유도하는 행동 유도성 미학입니다.",
+        9: "시각 정보를 강제하기 위해 텍스트창을 띄우는 것보다 조명(빛)의 동적 세기와 카메라 구도의 물리적 각도를 트는 연출이 최고의 직관적 가이드라인입니다.",
+        10: "캐릭터의 이동 속도, 도약 가속도, 발판 거리 한계값을 정의하여 맵의 그리드 단위를 산정하는 프로세스를 메트릭(Metrics) 설정이라 합니다.",
+        11: "칙센트미하이 몰입 이론에 근거하여 실력보다 허들 난이도가 너무 완만하면 극심한 지루함 상태에 직면하여 게임 플레이 가치가 유실됩니다.",
+        12: "실력 성장에 반해 적의 스펙이나 환경 페널티 수치가 급작스럽게 수직 상승하면 도전 의지 상실과 좌절을 겪고 영구 이탈하게 됩니다.",
+        13: "정기적 접속 지표를 방어하고 유지하기 위해 데일리 리셋 주기에 맞춰 연동 설계하는 필수 컴포넌트는 일일 퀘스트 미션 시스템입니다.",
+        14: "웹과 앱, 게임 화면 인지 바이어스 상 시선은 영문 알파벳 Z 모양이나 F 모양의 흐름 궤적 패턴에 따라 가시 정보의 가치를 정산합니다.",
+        15: "유저가 클릭 입력을 단행했음에도 아무런 상호작용 피드백 연출 없이 화면이 얼어붙는 현상은 최악의 불쾌한 사용자 경험(UX) 오류 사례입니다.",
+        16: "가방 인벤토리 슬롯 확장과 같은 한정 자원 소모 설계는 화폐 발행 가치를 강제로 시스템 내에 재흡수시켜 인플레이션 안정화를 돕는 훌륭한 싱크(Sink)입니다.",
+        17: "레벨디자인 맵 연출에서 플레이어의 직접적인 개사각 시야 차단 및 은엄폐 각도를 확보해 주는 방어 구조물을 엄폐물(Cover)이라 칭합니다.",
+        18: "아이콘의 본질은 가시 정보의 즉각성에 있으므로 형태적 실루엣을 보고도 텍스트 자막의 의존도를 낮춰 즉각 이해하도록 디자인하는 것이 최선입니다.",
+        19: "수치 밸런스를 라이브 배포하기 전에 사내 테스트 룸에서 특정 타겟 유저 혹은 전문 QA 그룹을 구성해 점검하는 작업을 인하우스 포커스 밸런스 테스트(FGT)라 합니다.",
+        20: "지속적인 플레이 노력과 협동 파밍 메커니즘을 연계해 유료 결제 유무와 상관없이 경제 엔진을 굴리게 만드는 모델은 파밍 기반 가치 순환 메커니즘입니다.",
+        21: "재화 유입과 인원 활동 지표를 유도하는 시스템적 경제 생산의 공급 기지는 Source(소스)입니다.",
+        22: "경제 시스템 속 인플레이션을 억제하기 위해 마련된 시스템적 회수 장치는 Sink(싱크)입니다.",
+        23: "가장 기본적이고 유기적인 반복 플레이 메커니즘 고리는 코어 루프(Core Loop)입니다.",
+        24: "별도의 텍스트 조건 없이도 클릭 행동을 유도하는 직관적 유도성을 지칭하는 용어는 어포던스(Affordance)입니다.",
+        25: "인터페이스 개발 배치 구상을 선과 박스 형태로 요약한 문서의 정식 명칭은 와이어프레임(Wireframe)입니다.",
+        26: "난이도와 실력의 밸런스가 균형을 이루는 이상적인 최적 영역의 상태 명칭은 몰입(Flow)입니다.",
+        27: "하위 아이템들을 갈아 상위 기획 장비 지표로 유도 변환하는 시스템은 제작(Crafting) 구조입니다.",
+        28: "레벨 metrics 단계에서 점프 기동 가능 한계값을 측정하는 지형지물 구성 단어는 발판(또는 플랫폼)입니다.",
+        29: "우측 엄지 손가락 반경에 모아 공격 액션을 제어하게 돕는 모바일 인터페이스 영역은 스킬패드(또는 가상패드)입니다.",
+        30: "확률 테이블 매칭값에 따라 아이템 배출 순위를 산정하는 데이터 명세는 보상 테이블(또는 드롭 테이블)입니다.",
+        31: {
+            modelAnswer: "<b>[모범 답안]</b> 골드나 강화석 등 자원 재화가 시스템에 공급되는 생산처(Source)의 총량에 비해, 회수 및 소멸을 유도하는 소비처(Sink)의 규모가 부족하여 불균형이 초래되면 게임 경제 엔진에 '인플레이션'이 발생합니다. 이로 인해 화폐의 실질 가치가 폭락하여 유저가 사냥이나 미션 수행을 통해 얻는 보상의 체감 가치와 의욕이 완전히 상실되며, 이는 동기부여가 소멸하여 유저가 단체로 이탈하는 심각한 부작용을 유도하게 됩니다. 따라서 기획자는 장비 강화 리스크, 인벤토리 구매 확장, 합성 수수료 등 다각적인 소비 밸런스를 치밀하게 배치해야 합니다.",
+            keywords: ["생산처", "source", "소비처", "sink", "불균형", "인플레이션", "가치 폭락", "보상 체감", "동기부여 소멸", "이탈", "강화", "수수료"]
+        },
+        32: {
+            modelAnswer: "<b>[모범 답안]</b> 모바일 기기의 특성상 한 손 파지 조작 시 엄지손가락의 활동 반경이 화면 오른쪽 하단 및 중앙 우측 반원에 집중되는 물리적 한계가 존재합니다. 따라서 직관성과 즉각적인 조작성이 최우선으로 요구되는 공격 버튼, 스킬, 점프 등의 컴포넌트는 우측 하단 엄지 반경의 '가상 스킬 패드' 구역에 밀집 배치해야 합니다. 반면 플레이어 프로필, HP/MP 바와 같이 조작성은 낮으나 정보 인지 수용 우선순위가 높은 텍스트 상태 정보는 시선 이동 패턴(Z/F 패턴)의 시작점인 좌측 상단(Top-Left) 구석에 고정 배치하고, 상점 링크나 환경설정 메뉴 등 가끔 사용하는 비전투용 유틸리티 탭은 우측 상단 모서리에 배치하는 것이 올바른 공간 레이아웃 상호작용 설계 공식입니다.",
+            keywords: ["한 손 파지", "엄지손가락", "오른쪽 하단", "스킬 패드", "밀집", "상태 정보", "시선 이동", "Z", "F", "좌측 상단", "환경설정", "우측 상단"]
+        },
+        33: {
+            modelAnswer: "<b>[모범 답안]</b> 텍스트 경고나 UI 지시선 없이 레벨 디자인만으로 동선을 제어하기 위해서는 첫째, '빛과 조명(Lighting) 연출'을 적극 활용하여 어두운 통로 속에서 가야 할 문이나 핵심 오브젝트 영역에만 스포트라이트를 배치해 직관적인 시선을 집중시켜야 합니다. 둘째, '카메라 구도 및 배치 각도(Perspective)'를 유동적으로 변형하여 유저가 맵에 진입하는 순간 넓게 트인 공간이나 거대한 랜드마크 타워가 수직 선상에 정면 노출되도록 환경을 유도해야 합니다. 셋째, 3D 구조물 오브젝트로 가시적 장애물을 형성하거나(엄폐물), 사막 속의 오아시스나 빛나는 발판처럼 정서적 어포던스 장치들을 선형 구조 동선상에 마일스톤 형태로 배치함으로써 유저가 본능적으로 경로를 따라 이동하도록 동선을 정교하게 가이드라인해야 합니다.",
+            keywords: ["빛", "조명", "Lighting", "스포트라이트", "카메라 구도", "각도", "랜드마크", "노출", "구조물", "장애물", "어포던스", "동선", "가이드라인"]
+        }
+    };
+
+    let scoreCard = {};
+
+    function checkMultipleChoice(qNum, correctVal) {
+        const selected = document.querySelector(`input[name="q${qNum}"]:checked`);
+        const feedback = document.getElementById(`feedback-${qNum}`);
+        
+        if (!selected) {
+            alert("보기를 선택해 주세요!");
+            return;
+        }
+
+        if (parseInt(selected.value) === correctVal) {
+            feedback.className = "feedback-box correct";
+            feedback.innerHTML = `<div class="explanation-title">⭕ 정답입니다!</div><div class="explanation-content">${explanations[qNum]}</div>`;
+            scoreCard[qNum] = true;
+        } else {
+            feedback.className = "feedback-box incorrect";
+            feedback.innerHTML = `<div class="explanation-title">❌ 오답입니다. (정답: ${correctVal}번)</div><div class="explanation-content">${explanations[qNum]}</div>`;
+            scoreCard[qNum] = false;
+        }
+        updateSummary();
+    }
+
+    function checkShortAnswer(qNum, correctArray) {
+        const userInput = document.getElementById(`q${qNum}-input`).value.trim().toLowerCase();
+        const feedback = document.getElementById(`feedback-${qNum}`);
+
+        if (!userInput) {
+            alert("답안을 입력해 주세요!");
+            return;
+        }
+
+        let isCorrect = correctArray.some(ans => userInput.includes(ans.toLowerCase()));
+
+        if (isCorrect) {
+            feedback.className = "feedback-box correct";
+            feedback.innerHTML = `<div class="explanation-title">⭕ 정답입니다!</div><div class="explanation-content">${explanations[qNum]}</div>`;
+            scoreCard[qNum] = true;
+        } else {
+            feedback.className = "feedback-box incorrect";
+            feedback.innerHTML = `<div class="explanation-title">❌ 오답입니다. (인정 정답 범위: ${correctArray.join(', ')})</div><div class="explanation-content">${explanations[qNum]}</div>`;
+            scoreCard[qNum] = false;
+        }
+        updateSummary();
+    }
+
+    function checkEssay(qNum) {
+        const userInput = document.getElementById(`q${qNum}-input`).value.trim();
+        const feedback = document.getElementById(`feedback-${qNum}`);
+
+        if (!userInput) {
+            alert("내용을 입력한 후 피드백을 확인하세요!");
+            return;
+        }
+
+        const data = explanations[qNum];
+        let matchedKeywords = [];
+        data.keywords.forEach(kw => {
+            if (userInput.toLowerCase().includes(kw.toLowerCase())) {
+                matchedKeywords.push(kw);
+            }
+        });
+
+        feedback.className = "feedback-box essay-feedback";
+        feedback.innerHTML = `
+            <div class="explanation-title">📝 서술형 채점 가이드 및 가답안</div>
+            <div class="explanation-content">
+                ${data.modelAnswer}
+                <br><br>
+                <b>[자가 채점 필수 키워드 매칭결과]</b><br>
+                - 현재 작성하신 답안 내 포함된 핵심 키워드: <span style="color:blue; font-weight:bold;">[${matchedKeywords.join(', ')}]</span> (총 ${data.keywords.length}개 중 ${matchedKeywords.length}개 발견)<br>
+                - 누락된 핵심 단어나 논리 구조가 있다면 가답안 템플릿을 참고하여 완벽한 시험 서술형 답안 문장력을 확보해 보세요!
+            </div>
+        `;
+    }
+
+    function updateSummary() {
+        let score = 0;
+        let totalChecked = 0;
+        for (let i = 1; i <= 30; i++) {
+            if (scoreCard[i] !== undefined) {
+                totalChecked++;
+                if (scoreCard[i] === true) score++;
+            }
+        }
+        
+        const summaryBox = document.getElementById("total-score-box");
+        summaryBox.innerHTML = `현재 확인 완료된 문제: ${totalChecked}/30 문항<br>객관식 및 단답형 스코어: <span style="color:var(--error-color); font-size:28px;">${score}</span> / 30 점`;
+    }
+</script>
+
+</body>
+</html>
