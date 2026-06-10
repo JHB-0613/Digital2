@@ -622,11 +622,11 @@
     }
 
     function checkEssay(qNum) {
-        const userInput = document.querySelector(`#feedback-${qNum} ~ .text-input-container textarea, #${feedback-id-fallback} .essay-answer-input`).value || document.getElementsByTagName('textarea')[qNum === 16 ? 0 : 1].value.trim();
+        const userInput = document.getElementById(`q${qNum}-input`).value.trim();
         const feedback = document.getElementById(`feedback-${qNum}`);
 
-        if (!userInput || userInput.length < 5) {
-            alert("내용을 충실히 입력한 후 피드백을 확인하세요!");
+        if (!userInput) {
+            alert("내용을 입력한 후 피드백을 확인하세요!");
             return;
         }
 
@@ -640,17 +640,17 @@
 
         feedback.className = "feedback-box essay-feedback";
         feedback.innerHTML = `
-            <div class="explanation-title">📝 서술형 자가 채점 가이드 및 예시 답안</div>
+            <div class="explanation-title">📝 서술형 채점 가이드 및 예시 가답안</div>
             <div class="explanation-content">
                 ${data.modelAnswer}
                 <br><br>
                 <b>[자가 검증 핵심 키워드 매칭결과]</b><br>
-                - 현재 제출 문장 내 포함된 기획 평가 핵심 키워드: <span style="color:blue; font-weight:bold;">[${matchedKeywords.join(', ')}]</span> (총 ${data.keywords.length}개 중 ${matchedKeywords.length}개 일치)<br>
-                - 모범 답안의 논리 전개 구조(추상 언어의 시스템 치환 기술력)를 비교하여 스스로 평가를 내려보세요!
+                - 현재 제출 문장 내 포함된 마케팅 평가 키워드: <span style="color:blue; font-weight:bold;">[${matchedKeywords.join(', ')}]</span> (총 ${data.keywords.length}개 중 ${matchedKeywords.length}개 일치)<br>
+                - 강의 자료에 입각한 원문 마케팅 용어 기술력을 점검해 보세요!
             </div>
         `;
     }
-
+    
     function updateSummary() {
         let score = 0;
         let totalChecked = 0;
