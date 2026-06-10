@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAU 게임기획 13주차 학습 평가 시스템</title>
+    <style>
+        :root {
+            --primary-color: #004b93;
+            --secondary-color: #f4f7fa;
+            --accent-color: #e28743;
+            --success-color: #2e7d32;
+            --error-color: #c62828;
+            --text-dark: #2c3e50;
+            --border-color: #dcdde1;
+        }
+
+        body {
+            font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+            background-color: #f8f9fa;
+            color: var(--text-dark);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        header p {
+            margin: 5px 0 0 0;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* 주차별 이동 버튼 컨테이너 */
+        .nav-container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 0 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .nav-btn {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 8px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #555;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn:hover {
+            background-color: #eee;
+            border-color: #999;
+        }
+
+        .nav-btn.active {
+            background-color: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        }
+
+        /* 메인 콘텐츠 */
+        main {
+            max-width: 850px;
+            margin: 0 auto 50px auto;
+            padding: 0 15px;
+        }
+
+        .quiz-intro {
+            background-color: white;
+            border-left: 5px solid var(--primary-color);
+            padding: 15px 20px;
+            margin-bottom: 30px;
+            border-radius: 0 8px 8px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .section-title {
+            font-size: 18px;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 6px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        /* 문제 카드 스타일 */
+        .question-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border: 1px solid #eef0f2;
+        }
+
+        .question-header {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .q-num {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 4px;
+            padding: 2px 8px;
+            font-size: 12px;
+            margin-right: 10px;
+            white-space: nowrap;
+            margin-top: 2px;
+        }
+
+        /* 객관식 보기 스타일 */
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 15px 0;
+        }
+
+        .option-item {
+            margin-bottom: 10px;
+        }
+
+        .option-label {
+            display: block;
+            background-color: #fdfdfd;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 12px 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14.5px;
+        }
+
+        .option-label:hover {
+            background-color: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+
+        .option-item input[type="radio"] {
+            margin-right: 10px;
+            transform: scale(1.1);
+            vertical-align: middle;
+        }
+
+        /* 주관식 입력 */
+        .text-input-container {
+            margin-bottom: 15px;
+        }
+
+        .short-answer-input {
+            width: 100%;
+            max-width: 400px;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 14.5px;
+            box-sizing: border-box;
+        }
+
+        .essay-answer-input {
+            width: 100%;
+            height: 120px;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 14.5px;
+            resize: vertical;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+
+        /* 결과 확인 버튼 */
+        .action-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .action-btn:hover {
+            background-color: #00366b;
+        }
+
+        /* 피드백 박스 */
+        .feedback-box {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 6px;
+            display: none;
+            font-size: 14px;
+        }
+
+        .feedback-box.correct {
+            display: block;
+            background-color: #e8f5e9;
+            border-left: 5px solid var(--success-color);
+            color: #1b5e20;
+        }
+
+        .feedback-box.incorrect {
+            display: block;
+            background-color: #ffebee;
+            border-left: 5px solid var(--error-color);
+            color: #b71c1c;
+        }
+
+        .feedback-box.essay-feedback {
+            display: block;
+            background-color: #fff8e1;
+            border-left: 5px solid #ffb300;
+            color: #5d4037;
+        }
+
+        .explanation-title {
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .explanation-content {
+            margin-top: 5px;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        /* 점수 요약 바 */
+        .summary-box {
+            background-color: white;
+            border: 2px solid var(--primary-color);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin-top: 40px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .summary-box h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+
+        .score-display {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--accent-color);
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>중앙대학교 게임기획 학습 평가 시스템</h1>
+    <p>13주차 강의자료 기반 맞춤형 평가 (13주: 게임마케팅 - 프로모션 타임라인 및 유저 관리)</p>
+</header>
+
+<div class="nav-container">
+    <button class="nav-btn" onclick="location.href='index.html';">9주차</button>
+    <button class="nav-btn" onclick="location.href='10.html';">10주차</button>
+    <button class="nav-btn" onclick="location.href='11.html';">11주차</button>
+    <button class="nav-btn" onclick="location.href='12.html';">12주차</button>
+    <button class="nav-btn active" onclick="location.reload();">13주차</button>
+    <button class="nav-btn" onclick="location.href='14.html';">14주차</button>
+</div>
+
+<main>
+    <div class="quiz-intro">
+        <strong>💡 13주차 마케팅(2) 평가 안내:</strong> 본 퀴즈는 제공된 13주차 강의자료('게임마케팅(2)')의 이론을 기반으로 설계되었습니다. 프로모션(Promotion)의 기획 정의, 모바일 게임 론칭 전후 4단계 마케팅 타임라인(준비기, 기대기, 확산기, 유지기)별 세부 태스크, CBT의 의의, 알림 푸시(Push) 메시지 설계 매커니즘, 로스트아크 모코코 등의 브랜드 자산 컬래버레이션 효과를 평가합니다.
+    </div>
+
+    <div class="section-title">PART 1. 사지선다형 객관식 문항 (20문제)</div>
+
+    <div class="question-card" id="q1-card">
+        <div class="question-header">
+            <span class="q-num">Q1</span>
+            <div>강의자료에서 명시한 마케팅 믹스 중 '프로모션(Promotion)'의 근본적인 목적과 가장 일치하는 질문은 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q1" value="1"> 어떻게 하면 우리 게임의 인앱 상품 가격을 더 비싸게 책정할 것인가?</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q1" value="2"> 어떻게 하면 사람들이 우리 게임에 관심을 갖게 하고 구입(플레이)을 촉진시킬 것인가?</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q1" value="3"> 어떤 프로그래밍 코드를 사용하여 그래픽 버그를 수정할 것인가?</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q1" value="4"> 자사 게임 엔진의 데이터 물리 연산 주기를 어떻게 단축할 것인가?</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(1, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-1"></div>
+    </div>
+
+    <div class="question-card" id="q2-card">
+        <div class="question-header">
+            <span class="q-num">Q2</span>
+            <div>강의자료(4~5페이지)에 정의된 모바일 게임 마케팅 과정 중, '론칭 8주 전부터 4주 전까지' 진행하는 준비기(STAGE 1)의 주요 활동은 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q2" value="1"> 사전예약 사이트 오픈 및 대규모 CBT 진행</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q2" value="2"> 초기 다운로드 수 극대화를 위한 TV 광고 라이브</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q2" value="3"> 게임 분석, 마케팅 전략 및 세부 액션 플랜 수립</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q2" value="4"> 휴면 유저 복귀를 위한 카카오톡 알림 푸시 발송</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(2, 3)">정답 확인</button>
+        <div class="feedback-box" id="feedback-2"></div>
+    </div>
+
+    <div class="question-card" id="q3-card">
+        <div class="question-header">
+            <span class="q-num">Q3</span>
+            <div>'론칭 4주 전부터 정식 론칭 전까지'를 뜻하는 기대기(STAGE 2) 타임라인의 핵심 마케팅 목표는 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q3" value="1"> 게임의 핵심 시스템과 화폐 인플레이션을 전면 초기화하는 것</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q3" value="2"> 사전예약 및 CBT(비공개 테스트)를 통해 시장의 기대감을 조성하는 것</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q3" value="3"> 정식 서비스 개시 후 이탈한 복귀 유저 대상의 보상 테이블 설계</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q3" value="4"> 해외 퍼블리셔 선정을 위한 투자 유치용 제안서 최종 발송</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(3, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-3"></div>
+    </div>
+
+    <div class="question-card" id="q4-card">
+        <div class="question-header">
+            <span class="q-num">Q4</span>
+            <div>강의자료에서 설명한 CBT(Closed Beta Test)의 핵심적인 마케팅 및 개발적 기능에 해당하지 않는 것은?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q4" value="1"> 소수 유저들에게 한정적으로 공개하여 게임의 서버 안정성을 점검한다.</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q4" value="2"> 유저 피드백을 수집하여 정식 오픈 전에 콘텐츠의 단점을 보완한다.</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q4" value="3"> 소셜 미디어나 커뮤니티에 입소문(바이럴 효과)을 내어 기대감을 높인다.</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q4" value="4"> 인게임의 최종 유료 결제 BM 상품을 출시하여 확정 매출을 뽑아낸다.</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(4, 4)">정답 확인</button>
+        <div class="feedback-box" id="feedback-4"></div>
+    </div>
+
+    <div class="question-card" id="q5-card">
+        <div class="question-header">
+            <span class="q-num">Q5</span>
+            <div>정식 론칭부터 론칭 후 4주까지를 의미하는 확산기(STAGE 3)의 가장 중요한 마케팅 전략 방향성은 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q5" value="1"> 최소한의 마케팅 비용만 남기고 모든 광고 집행을 중단하는 전술</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q5" value="2"> 초기 유저 모객을 전제로 다운로드(Traffic) 수치를 단기간에 극대화하는 것</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q5" value="3"> 마케팅 액션 플랜을 백지화하고 유저 자가 유입만 기다리는 방어 전술</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q5" value="4"> 신작 개발 기획팀을 꾸려 기존 라이브 서비스 데이터를 전면 폐기하는 것</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(5, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-5"></div>
+    </div>
+
+    <div class="question-card" id="q6-card">
+        <div class="question-header">
+            <span class="q-num">Q6</span>
+            <div>론칭 4주 이후인 유지기(STAGE 4) 타임라인에서 마케팅 담당자와 기획자가 연대하여 방어해야 하는 핵심 모바일 지표는 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q6" value="1"> 사전예약 참여자 수</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q6" value="2"> CBT 참여 신청률</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q6" value="3"> 유저 잔존율(Retention) 및 복귀율</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q6" value="4"> 보도자료 배포 수량</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(6, 3)">정답 확인</button>
+        <div class="feedback-box" id="feedback-6"></div>
+    </div>
+
+    <div class="question-card" id="q7-card">
+        <div class="question-header">
+            <span class="q-num">Q7</span>
+            <div>강의자료에서 설명한 브랜드 자산의 핵심 공식인 'BI(Brand Identity)'를 구성하는 4대 시각·서사 자산 요소가 아닌 것은?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q7" value="1"> 로고 (Logo)</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q7" value="2"> 슬로건 (Slogan)</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q7" value="3"> 서버 인프라 아키텍처 (Server)</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q7" value="4"> 색상 (Color) 및 심볼 (Symbol)</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(7, 3)">정답 확인</button>
+        <div class="feedback-box" id="feedback-7"></div>
+    </div>
+
+    <div class="question-card" id="q8-card">
+        <div class="question-header">
+            <span class="q-num">Q8</span>
+            <div>강의자료에 제시된 카카오톡 연동 마케팅 사례 중, "(광고) 앵콜! 잇츠 콘 타임 플레이 보상 2배" 혹은 "접속 시 즉시 2000콘 지급" 등 유저의 직접적인 재진입을 유도하는 프로모션 기법은 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q8" value="1"> 오프라인 지면 신문 광고</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q8" value="2"> 유저 접속 유도 알림 푸시(Push) 및 알림톡 프로모션</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q8" value="3"> 글로벌 크라우드 펀딩 투자 유치 광고</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q8" value="4"> 인게임 그래픽 리소스 렌더링 최적화</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(8, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-8"></div>
+    </div>
+
+    <div class="question-card" id="q9-card">
+        <div class="question-header">
+            <span class="q-num">Q9</span>
+            <div>&lt;로스트아크&gt;가 이마트24, 맘스터치 등과 진행하여 콜라보 매진 대란을 일으킨 마케팅 사례를 통해 증명된 '심볼(Symbol) 캐릭터 브랜딩'의 강력한 장점은 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q9" value="1"> 게임을 전혀 모르는 대중에게도 직관적이고 친숙하게 다가가 브랜드 인지도를 대폭 확장시킨다.</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q9" value="2"> 인게임 서버의 넷코드 동기화 연산 레이턴시를 0ms로 단축시켜 준다.</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q9" value="3"> 확률형 아이템의 드롭 테이블 수치를 실시간으로 자동 밸런싱해 준다.</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q9" value="4"> 하드코어 랭커 유저들만을 선별하여 커뮤니티 장벽을 엄격하게 강화한다.</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(9, 1)">정답 확인</button>
+        <div class="feedback-box" id="feedback-9"></div>
+    </div>
+
+    <div class="question-card" id="q10-card">
+        <div class="question-header">
+            <span class="q-num">Q10</span>
+            <div>유지기 단계에서 푸시(Push) 메시지를 발송할 때 유저의 불쾌감을 줄이고 리텐션을 극대화하기 위해 포함해야 하는 가장 중요한 가치 요소는 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q10" value="1"> 장황하고 복잡한 시스템 아키텍처 패치 노트 원문</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q10" value="2"> 실질적이고 유용한 인게임 행동 유인 보상 및 핵심 혜택 안내</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q10" value="3"> 자사 대표이사의 개발 소회문 요약본</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q10" value="4"> 타사 제품군의 단점을 원색적으로 비방하는 비교 문구</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(10, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-10"></div>
+    </div>
+
+    <div class="question-card" id="q11-card">
+        <div class="question-header">
+            <span class="q-num">Q11</span>
+            <div>사전예약 프로모션 진행 시 누적 참여자 수(예: 50만 명, 100만 명 달성)에 따라 전체 유저에게 보상을 누적 지급하는 기획적 설계의 근본적인 목적은 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q11" value="1"> 유저들 간의 경쟁을 부추겨 초기 정식 오픈을 고의로 지연시키기 위해</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q11" value="2"> 유저 스스로 주변 지인에게 게임을 홍보(바이럴 유도)하여 집단적 군중 심리를 극대화하기 위해</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q11" value="3"> 개발비 보전을 위한 크라우드 펀딩 투자금을 강제로 회수하기 위해</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q11" value="4"> 인게임 최고 최고 등급 아이템의 밸런스 가치를 폭락시키기 위해</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(11, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-11"></div>
+    </div>
+
+    <div class="question-card" id="q12-card">
+        <div class="question-header">
+            <span class="q-num">Q12</span>
+            <div>강의자료 타임라인 기준, 정식 론칭 후 "초기 1주일 내 대규모 마케팅 화력을 집중 투입"해야 하는 마케팅 분석학적 이유는 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q12" value="1"> 구글 플레이 및 앱스토어의 인기/매출 차트 상위권에 진입하여 대세감을 형성해야 자연 유입 유저가 극대화되기 때문</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q12" value="2"> 1주일이 지나면 게임 서버 인프라가 자동으로 만료되도록 설계되어 있기 때문</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q12" value="3"> 사내 QA 부서의 업무 피로도를 강제로 낮추기 위한 유일한 대안이기 때문</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q12" value="4"> 1주일 이후에는 인게임 아이템 경제 밸런싱이 불가능해지기 때문</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(12, 1)">정답 확인</button>
+        <div class="feedback-box" id="feedback-12"></div>
+    </div>
+
+    <div class="question-card" id="q13-card">
+        <div class="question-header">
+            <span class="q-num">Q13</span>
+            <div>모바일 게임 마케팅에서 론칭 후 유지기 단계(D+4주 이후)로 진입함에 따라 마케팅 비용 집행 페이스는 대개 어떻게 조정되는 것이 정석인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q13" value="1"> 초기 확산기보다 10배 이상의 공격적인 무차별 매체 광고비를 증액한다.</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q13" value="2"> 대규모 무차별 광고를 줄이고, 핵심 충성 유저 케어와 업데이트 시점 중심의 효율적·타겟팅 비용 집행으로 전환한다.</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q13" value="3"> 마케팅 비용을 법적으로 0원으로 고정하고 오직 인게임 재화만 무한 발행한다.</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q13" value="4"> 경쟁사 주식을 매입하는 용도로 모든 마케팅 예산을 전용한다.</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(13, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-13"></div>
+    </div>
+
+    <div class="question-card" id="q14-card">
+        <div class="question-header">
+            <span class="q-num">Q14</span>
+            <div>자료에 등장한 푸시 메시지 사례 중, "성장하고 싶다양~! 돌리가 치유의 진화석+골드를 선물로~"와 같은 메시지가 유저에게 주는 긍정적인 인지 심리는 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q14" value="1"> 게임이 나를 감시하고 독촉한다는 압박감</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q14" value="2"> 캐릭터 콘셉트(양)를 살린 친근한 접근과 실질적 성장 피드백 보상에 대한 기대감</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q14" value="3"> 시스템 오류로 인해 내 계정이 삭제될지 모른다는 공포심</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q14" value="4"> 인앱 결제를 반드시 해야만 한다는 강제적 부채 의식</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(14, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-14"></div>
+    </div>
+
+    <div class="question-card" id="q15-card">
+        <div class="question-header">
+            <span class="q-num">Q15</span>
+            <div>다음 중 정식 론칭 후 발생하는 모바일 트래픽 지표의 하락 방어(Retention 관리)를 위해 인게임 기획 단계에서 유기적으로 준비해야 하는 마케팅 연계 장치는 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q15" value="1"> 신규 가입 차단 시스템</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q15" value="2"> 대규모 콘텐츠 업데이트 플랜 및 정기적인 라이브 프로모션 이벤트</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q15" value="3"> 클라이언트 그래픽 화질 강제 다운그레이드 패치</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q15" value="4"> 고객센터 유선 문의 전면 유료화 선언</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(15, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-15"></div>
+    </div>
+
+    <div class="question-card" id="q16-card">
+        <div class="question-header">
+            <span class="q-num">Q16</span>
+            <div>강의자료에서 브랜딩 자산 확장의 긍정적 사례로 다룬 &lt;로스트아크&gt;의 '모코코' 심볼의 캐릭터 미학적 특징은 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q16" value="1"> 8등신의 하드코어하고 그로테스크한 다크 판타지 전사 실루엣</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q16" value="2"> 대중적이고 직관적이며 귀여운 형태의 캐릭터 심볼 디자인</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q16" value="3"> 복잡한 타이포그래피 문장으로만 온전히 이루어진 대사 텍스트 덩어리</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q16" value="4"> 색상 정보가 전혀 배제된 흑백의 미니멀리즘 기하학 도형</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(16, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-16"></div>
+    </div>
+
+    <div class="question-card" id="q17-card">
+        <div class="question-header">
+            <span class="q-num">Q17</span>
+            <div>사전예약 프로모션을 진행할 때 수집하는 가장 기본적인 마케팅 데이터 자산이자 유저 소통 채널의 수단은 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q17" value="1"> 유저 개인의 주거래 은행 계좌 번호 정보</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q17" value="2"> 플레이어의 스마트폰 번호(모바일 연락처) 데이터 기반의 푸시 수신 동의</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q17" value="3"> 개인의 하드웨어 PC CPU 스펙 하이엔드 상세 사양표</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q17" value="4"> 학창 시절 평균 성적 지표 명세서</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(17, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-17"></div>
+    </div>
+
+    <div class="question-card" id="q18-card">
+        <div class="question-header">
+            <span class="q-num">Q18</span>
+            <div>게임 론칭 직후인 확산기(D+0 ~ D+4주) 단계에서 대중 매체 마케팅 광고(TV 광고, 대형 옥외 광고, 인플루언서 프로모션)를 폭발적으로 동시에 집행하는 마케팅 기법의 정식 명칭은 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q18" value="1"> 잠행 마케팅 (Underground)</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q18" value="2"> 대규모 부스팅 마케팅 (Burst / Boosting Campaign)</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q18" value="3"> 경제 디플레이션 헷징 마케팅</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q18" value="4"> 타겟 우회 크라우드 소싱 기법</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(18, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-18"></div>
+    </div>
+
+    <div class="question-card" id="q19-card">
+        <div class="question-header">
+            <span class="q-num">Q19</span>
+            <div>강의자료에 제시된 푸시 알림 제목 양식 중, 유저에게 마케팅 정보성 수신 동의 위반 페널티를 받지 않기 위해 텍스트 맨 앞에 반드시 고정 표기해야 하는 법적 필수 표기어는 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q19" value="1"> [필독]</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q19" value="2"> (광고)</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q19" value="3"> [추천]</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q19" value="4"> (공지)</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(19, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-19"></div>
+    </div>
+
+    <div class="question-card" id="q20-card">
+        <div class="question-header">
+            <span class="q-num">Q20</span>
+            <div>게임 마케팅 및 기획에서 프로모션과 브랜딩의 궁극적인 지향점은 유저를 단순한 일회성 '소비자'를 넘어 우리 게임의 가치를 적극 옹호하고 바이럴을 주도하는 어떤 집단으로 만드는 것인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q20" value="1"> 블랙 컨슈머 (Black Consumer) 집단</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q20" value="2"> 충성 고객 및 브랜드 팬덤 (Fandom / 오피니언 리더) 집단</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q20" value="3"> 단순 무작위 단판 이용자 집단</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q20" value="4"> 계정 도용 및 불법 핵 프로그램 유포 집단</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(20, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-20"></div>
+    </div>
+
+
+    <div class="section-title">PART 2. 주관식 단답형 문항 (10문제)</div>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q21</span>
+            <div>정식 오픈 직전 소수 유저층을 대상으로 게임 기능 및 서버 부하, 콘텐츠 밸런스를 검증하는 비공개 테스트의 약어(CBT)의 풀네임 중 첫 단어를 쓰시오. (영문 대소문자 무관)</div>
+        </div>
+        <div class="text-input-container"><input type="text" id="q21-input" class="short-answer-input" placeholder="정답을 입력하세요"></div>
+        <button class="action-btn" onclick="checkShortAnswer(21, ['closed', 'cloesd'])">정답 확인</button>
+        <div class="feedback-box" id="feedback-21"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q22</span>
+            <div>마케팅 믹스 4P 구성요소 중 제품의 유통 및 판매 촉진, 인지 유도를 지칭하는 영문 프로모션(Promotion)의 한글 용어를 쓰시오.</div>
+        </div>
+        <div class="text-input-container"><input type="text" id="q22-input" class="short-answer-input" placeholder="정답을 입력하세요"></div>
+        <button class="action-btn" onclick="checkShortAnswer(22, ['판매촉진', '판촉', '홍보'])">정답 확인</button>
+        <div class="feedback-box" id="feedback-22"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q23</span>
+            <div>모바일 게임 마케팅 타임라인 4단계 중 'D-4주 ~ 론칭' 사이의 기간을 지칭하는 용어로, 사전예약과 오픈 베타 전 기대치 조성을 목적으로 하는 단계의 명칭은 무엇인가?</div>
+        </div>
+        <div class="text-input-container"><input type="text" id="q23-input" class="short-answer-input" placeholder="정답을 입력하세요"></div>
+        <button class="action-btn" onclick="checkShortAnswer(23, ['기대기', '기대기 단계'])">정답 확인</button>
+        <div class="feedback-box" id="feedback-23"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q24</span>
+            <div>정식 서비스 개시부터 한 달(론칭~D+4주)까지를 의미하며, 대규모 부스팅 캠페인을 통해 트래픽과 다운로드 수를 폭발적으로 올리는 단계의 명칭은 무엇인가?</div>
+        </div>
+        <div class="text-input-container"><input type="text" id="q24-input" class="short-answer-input" placeholder="정답을 입력하세요"></div>
+        <button class="action-btn" onclick="checkShortAnswer(24, ['확산기', '확산기 단계'])">정답 확인</button>
+        <div class="feedback-box" id="feedback-24"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q25</span>
+            <div>론칭 4주 이후 유저 잔존 지표(Retention) 방어와 휴면 유저 복귀, 업데이트 중심의 효율적 관리를 단행하는 마케팅 타임라인 단계의 명칭은 무엇인가?</div>
+        </div>
+        <div class="text-input-container"><input type="text" id="q25-input" class="short-answer-input" placeholder="정답을 입력하세요"></div>
+        <button class="action-btn" onclick="checkShortAnswer(25, ['유지기', '유지기 단계'])">정답 확인</button>
+        <div class="feedback-box" id="feedback-25"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q26</span>
+            <div>로스트아크의 매진 열풍 주역이자, 특정 캐릭터·동물 등의 외형 특징을 극도로 단순화하여 대중에게 각인시키는 BI 핵심 시각 요소를 지칭하는 단어를 쓰시오.</div>
+        </div>
+        <div class="text-input-container"><input type="text" id="q26-input" class="short-answer-input" placeholder="정답을 입력하세요"></div>
+        <button class="action-btn" onclick="checkShortAnswer(26, ['심볼', 'symbol'])">정답 확인</button>
+        <div class="feedback-box" id="feedback-26"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q27</span>
+            <div>유지기 마케팅에서 이탈하려는 유저를 실시간으로 스마트폰 상단 바 알림 형태로 붙잡기 위해 발송하는 기동 메시지 시스템의 명칭을 쓰시오. (영문 4글자 또는 한글)</div>
+        </div>
+        <div class="text-input-container"><input type="text" id="q27-input" class="short-answer-input" placeholder="정답을 입력하세요"></div>
+        <button class="action-btn" onclick="checkShortAnswer(27, ['푸시', 'push', '푸시메시지', '푸시 알림'])">정답 확인</button>
+        <div class="feedback-box" id="feedback-27"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q28</span>
+            <div>강의자료에 등항하는 마케팅 알림톡 메시지 중 "신캐가 출시되었습니다!" 유형의 푸시가 유저에게 던지는 가공 목적의 알림 유형은 무슨 알림인가?</div>
+        </div>
+        <div class="text-input-container"><input type="text" id="q28-input" class="short-answer-input" placeholder="정답을 입력하세요"></div>
+        <button class="action-btn" onclick="checkShortAnswer(28, ['업데이트', '업데이트 알림'])">정답 확인</button>
+        <div class="feedback-box" id="feedback-28"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q29</span>
+            <div>로스트아크 콜라보 대란의 주역이자, 이마트24 및 맘스터치 세트 상품의 실물 패키지에 적용되었던 귀여운 시그니처 캐릭터의 고유 명칭은 무엇인가?</div>
+        </div>
+        <div class="text-input-container"><input type="text" id="q29-input" class="short-answer-input" placeholder="정답을 입력하세요"></div>
+        <button class="action-btn" onclick="checkShortAnswer(29, ['모코코'])">정답 확인</button>
+        <div class="feedback-box" id="feedback-29"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q30</span>
+            <div>마케팅 타임라인 1단계인 'D-8주 ~ D-4주'에 수립하는 세부적인 마케팅 실행 일정 보고서 및 예산 분배 체계를 '세부 OOOO'이라고 부릅니다. 빈칸을 채우시오.</div>
+        </div>
+        <div class="text-input-container"><input type="text" id="q30-input" class="short-answer-input" placeholder="정답을 입력하세요"></div>
+        <button class="action-btn" onclick="checkShortAnswer(30, ['액션플랜', '액션 플랜', 'action plan'])">정답 확인</button>
+        <div class="feedback-box" id="feedback-30"></div>
+    </div>
+
+
+    <div class="section-title">PART 3. 주관식 서술형 문항 (3문제)</div>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q31</span>
+            <div><strong>[서술형]</strong> 모바일 게임 프로모션의 타임라인 관리와 관련하여, 론칭 전 단계인 '기대기(D-4주 ~ 론칭)'와 론칭 직후 단계인 '확산기(론칭 ~ D+4주)'의 구체적인 마케팅 핵심 목표 및 전술의 차이점을 상세히 비교하여 서술하시오.</div>
+        </div>
+        <div class="text-input-container"><textarea id="q31-input" class="essay-answer-input" placeholder="여기에 서술형 답안을 작성하세요. 작성 후 아래 버튼을 누르면 모범 답안 및 채점 핵심 가이드가 열립니다."></textarea></div>
+        <button class="action-btn" onclick="checkEssay(31)">작성 완료 및 피드백 보기</button>
+        <div class="feedback-box" id="feedback-31"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q32</span>
+            <div><strong>[서술형]</strong> 게임 라이브 유지기(D+4주 이후) 단계에서 발송하는 유저 접속 유도용 '푸시(Push) 메시지 및 카카오톡 알림톡 프로모션'을 기획할 때, 무차별적인 스팸 피로도를 줄이고 실질 리텐션을 높이기 위해 메시지 내용에 반드시 포함해야 하는 요건들을 자료를 기반으로 설명하시오.</div>
+        </div>
+        <div class="text-input-container"><textarea id="q32-input" class="essay-answer-input" placeholder="여기에 서술형 답안을 작성하세요. 작성 후 아래 버튼을 누르면 모범 답안 및 채점 핵심 가이드가 열립니다."></textarea></div>
+        <button class="action-btn" onclick="checkEssay(32)">작성 완료 및 피드백 보기</button>
+        <div class="feedback-box" id="feedback-32"></div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q33</span>
+            <div><strong>[서술형]</strong> &lt;로스트아크&gt;의 모코코 사례처럼, 잘 구축된 브랜드 자산의 '심볼(Symbol)'을 활용한 타 업종(식음료 프랜차이즈, 편의점 등)과의 크로스 오버 컬래버레이션 프로모션이 게임 안팎으로 가져오는 유입학적 및 브랜딩 가치 시너지 효과를 설명하시오.</div>
+        </div>
+        <div class="text-input-container"><textarea id="q33-input" class="essay-answer-input" placeholder="여기에 서술형 답안을 작성하세요. 작성 후 아래 버튼을 누르면 모범 답안 및 채점 핵심 가이드가 열립니다."></textarea></div>
+        <button class="action-btn" onclick="checkEssay(33)">작성 완료 및 피드백 보기</button>
+        <div class="feedback-box" id="feedback-33"></div>
+    </div>
+
+    <div class="summary-box">
+        <h3>🎉 13주차 퀴즈 수행 결과 요약</h3>
+        <p>문제를 모두 풀고 정답 확인을 진행해 보세요!</p>
+        <div class="score-display" id="total-score-box">객관식/단답형 채점 대기 중</div>
+        <p style="font-size:12px; color:#666;">* 주관식 서술형 3문제는 하단의 모범답안 가이드라인을 참조하여 스스로 자가 채점을 진행해 주세요.</p>
+    </div>
+</main>
+
+<script>
+    // 각 문제별 해설 및 정답 맵 정의
+    const explanations = {
+        1: "강의자료 4페이지 프로모션 정의에 따르면 어떻게 하면 잠재 유저층의 흥미와 구매(플레이)를 정당하게 유도 및 촉진할 것인가가 핵심 질문입니다.",
+        2: "론칭 8주 전부터 4주 전까지의 준비기에는 게임 정밀 분석, 상위 마케팅 전략(3C, STP) 구상 및 실행용 세부 액션 플랜 수립이 배정됩니다.",
+        3: "기대기는 론칭 직전 4주간 진행되며, 사전예약 사이트 오픈과 한정 비공개 테스트(CBT)를 연동해 시장의 바이럴 및 기대감을 최고조로 빌드업하는 단계입니다.",
+        4: "CBT는 서버 인프라 안정화와 게임 콘텐츠 보완을 위한 베타 테스트 기법으로, 정식 출시 전에 결제를 강제하여 매출을 즉시 확보하는 BM 연출 단계가 아닙니다.",
+        5: "정식 오픈 후 첫 한 달(확산기)은 대형 마케팅 예산 부스팅 화력을 집중해 스토어 차트 상위권을 장악하고 다운로드 트래픽 수를 단기간에 극대화해야 하는 시기입니다.",
+        6: "론칭 4주 이후인 유지기는 유입된 유저들이 이탈하지 않도록 유저 잔존율(Retention) 수치를 안정화 방어하고 복귀를 유도하는 것이 정석 태스크입니다.",
+        7: "BI(Brand Identity)는 로고(Logo), 슬로건(Slogan), 색상(Color), 심볼(Symbol)의 결합체입니다. 서버 인프라 하드웨어는 마케팅 BI 자산이 아닌 기술 아키텍처 영역입니다.",
+        8: "카카오톡이나 스마트폰 상단 푸시 메시지는 골드 및 버프 아이템 증정 등의 혜택을 명시하여 휴면 유저의 인게임 즉각 재진입을 트리거하는 강력한 유도 프로모션입니다.",
+        9: "모코코 캐릭터 콜라보처럼 독창적인 심볼을 활용한 이종 결합은 게임을 접해보지 못한 라이트 대중에게도 직관적으로 접근하여 브랜드 신뢰도와 인지 장벽을 전면 허물어 줍니다.",
+        10: "유저가 불쾌감을 느끼는 스팸으로 오인받지 않기 위해서는 푸시 메시지 내에 명확한 '인게임 획득 보상(골드, 재화 등)' 및 핵심 혜택 밸류를 직관적으로 제시해야 합니다.",
+        11: "사전예약 인원 달성 보상 구조는 유저가 자발적으로 주변 인맥에게 추천 및 바이럴 링크를 전파하게 만들어 군중 심리적 모객 효과를 실현하는 기획 전술입니다.",
+        12: "론칭 초기 대세감을 형성해 차트 상위권 순위를 장악해야만, 이후 별도의 유료 마케팅 비용 없이도 오가닉(자연 유입) 유저 트래픽이 연속적으로 유입되기 때문입니다.",
+        13: "유지기 단계에서는 무차별 대규모 대중 매체 광고비를 감축하고, 핵심 충성 유저 소통 케어 및 대규모 업데이트 시점에만 핀포인트로 태스크 예산을 집행합니다.",
+        14: "돌리(양) 캐릭터 콘셉트 어투를 살린 푸시 알림은 유저에게 정서적 친근함을 형성하고, 동시에 '진화석+골드'라는 실질적인 플레이 필요 가치를 인지시켜 접속률을 방어합니다.",
+        15: "유지기 단계의 리텐션 지표 방어선 구축을 위해서는 대규모 서사 시나리오 및 인게임 시스템 콘텐츠 업데이트 계획과 주차별 연동 이벤트가 필수적으로 순환 제공되어야 합니다.",
+        16: "로스트아크 모코코는 남녀노소 누구나 거부감 없이 직관적으로 매료될 수 있는 '귀엽고 대중적인 형태의 캐릭터 심볼 미학'을 완벽히 선점하고 구축했습니다.",
+        17: "사전예약 사이트 운영의 본질은 출시 직후 모바일에 즉시 론칭 알림 프로모션을 발송할 수 있도록 타겟의 '스마트폰 번호 및 푸시 수신 동의' 자산을 적법하게 모객하는 과정입니다.",
+        18: "오픈 초기에 동시다발적으로 매체 광고 화력을 대량 집행하여 인지 지표를 일시에 폭발시키는 전략을 Burst/부스팅 마케팅 캠페인이라 칭합니다.",
+        19: "정보통신망법 수신 가이드라인에 따라 마케팅 프로모션 목적의 정보성 푸시 메시지 텍스트 맨 앞머리에는 반드시 '(광고)'라는 문구를 강제 표기해야 합니다.",
+        20: "마케팅과 브랜딩의 궁극의 지향점은 게이머를 단순히 자원을 소모하는 일방적 구매자가 아닌, 스스로 게임의 매력을 주변에 알리는 강력한 '충성 팬덤 및 브랜드 지지층'으로 육성하는 것입니다.",
+        21: "정식 오픈 전 비공개 베타 테스트의 약어는 Closed Beta Test이므로 첫 단어는 Closed입니다.",
+        22: "구매 및 플레이 가치를 촉진시키는 마케팅 프로모션의 한글 대응 전공 용어 정답은 '판매촉진' 또는 '판촉'입니다.",
+        23: "출시 직전 4주간 사전예약과 입소문 기대감을 최대로 끌어올리는 타임라인 단계 정답은 '기대기'입니다.",
+        24: "론칭 한 달간 화력을 집중 투입해 초기 트래픽과 스토어 차트 점령을 완수하는 단계 정답은 '확산기'입니다.",
+        25: D+4주 이후 리텐션 안정화와 효율적 유저 관리에 초점을 맞추는 마케팅 단계 정답은 '유지기'입니다.",
+        26: 브랜드 자산 공식 중 로고와 구별되어 사물이나 캐릭터 특징을 단순 가시화하는 정답 요소 단어는 '심볼(Symbol)'입니다.",
+        27: 유저의 스마트폰 환경 상단 표시줄에 실시간으로 보상 도달 알림을 던져 복귀를 유도하는 시스템 정답은 '푸시' 또는 'push'입니다.",
+        28: "자료에 명시된 '신캐 출시' 알림톡 사례의 기획적 프로모션 발송 성격 카테고리 정답은 '업데이트' 또는 '업데이트 알림'입니다.",
+        29: "편의점 및 프랜차이즈 콜라보로 대규모 오픈런 품절 대란을 유도한 정답 캐릭터 명칭은 '모코코'입니다.",
+        30: 마케팅 전략 1단계에서 도출하는 구체적인 예산, 매체 집행 일정표 문서의 명칭 정답은 '액션플랜' 또는 '액션 플랜'입니다.",
+        31: {
+            modelAnswer: "<b>[모범 답안]</b> 론칭 전 단계인 '기대기'는 사전예약 사이트 오픈 및 비공개 테스트(CBT) 진행을 핵심 전술로 삼으며, 시장에 출시 전 강력한 입소문과 바이럴 효과를 내어 '기대감을 최고조로 빌드업하는 것'을 목표로 합니다. 반면, 론칭 직후 단계인 '확산기'는 대규모 부스팅 광고 화력을 동시다발적으로 폭발시키는 전술을 취하며, 스토어 차트 상위권 장악 및 초기 '다운로드 트래픽 수치를 단기간에 극대화하는 것'을 궁극적인 골(Goal)로 삼아 뚜렷한 차이점을 보입니다.",
+            keywords: ["기대기", "사전예약", "CBT", "기대감", "빌드업", "확산기", "부스팅", "차트 상위권", "다운로드", "트래픽 극대화"]
+        },
+        32: {
+            modelAnswer: "<b>[모범 답안]</b> 유지기 단계에서 발송하는 푸시 및 알림톡 프로모션은 단순 스팸으로 취급되는 불쾌감을 예방하기 위해 첫째, 정보통신망법 가이드라인에 따른 맨 앞머리 '(광고)' 표기 조항을 엄격히 준수해야 합니다. 둘째, 유저가 메시지를 확인하고 인게임에 즉각 재접속할 명확한 명분인 '실질적인 인게임 보상(예: 골드, 치유의 진화석 혜택 등)'을 직관적으로 제시해야 합니다. 셋째, 신규 캐릭터 출시나 이벤트 오픈 주기에 맞춘 '업데이트 명분과 친근한 캐릭터 어투 콘셉트'를 융합 배치하여 유저의 접속 유인 매커니즘을 정교하게 완성해야 합니다.",
+            keywords: ["광고 표기", "재접속", "보상", "골드", "진화석", "혜택", "업데이트", "친근한", "콘셉트", "유인"]
+        },
+        33: {
+            modelAnswer: "<b>[모범 답안]</b> 잘 구축된 캐릭터 심볼 자산을 활용한 이종 산업과의 크로스오버 컬래버레이션은 첫째, 기존 하드코어 게이머뿐만 아니라 게임을 전혀 모르는 '일반 라이트 대중층'에게까지 친숙하고 귀여운 형태로 다가가 브랜드의 인지도 장벽을 전면 허물어 주는 강력한 오가닉 모객 유입 효과를 가져옵니다. 둘째, 실물 패키지 굿즈 매진 대란 등을 통해 단순 디지털 데이터 가치를 넘어 '현실 공간까지 브랜드 충성 경험을 확장'시키는 파급력을 지니며, 궁극적으로 유저를 단순 소비자가 아닌 강력한 브랜드 팬덤이자 지지층으로 록인(Lock-in)시키는 고차원적 브랜딩 시너지 가치를 발생시킵니다.",
+            keywords: ["심볼", "이종 산업", "컬래버레이션", "대중층", "인지도 장벽", "오가닉", "유입 효과", "실물 굿즈", "경험 확장", "팬덤", "록인"]
+        }
+    };
+
+    let scoreCard = {};
+
+    function checkMultipleChoice(qNum, correctVal) {
+        const selected = document.querySelector(`input[name="q${qNum}"]:checked`);
+        const feedback = document.getElementById(`feedback-${qNum}`);
+        
+        if (!selected) {
+            alert("보기를 선택해 주세요!");
+            return;
+        }
+
+        if (parseInt(selected.value) === correctVal) {
+            feedback.className = "feedback-box correct";
+            feedback.innerHTML = `<div class="explanation-title">⭕ 정답입니다!</div><div class="explanation-content">${explanations[qNum]}</div>`;
+            scoreCard[qNum] = true;
+        } else {
+            feedback.className = "feedback-box incorrect";
+            feedback.innerHTML = `<div class="explanation-title">❌ 오답입니다. (정답: ${correctVal}번)</div><div class="explanation-content">${explanations[qNum]}</div>`;
+            scoreCard[qNum] = false;
+        }
+        updateSummary();
+    }
+
+    function checkShortAnswer(qNum, correctArray) {
+        const userInput = document.getElementById(`q${qNum}-input`).value.trim().toLowerCase();
+        const feedback = document.getElementById(`feedback-${qNum}`);
+
+        if (!userInput) {
+            alert("답안을 입력해 주세요!");
+            return;
+        }
+
+        let isCorrect = correctArray.some(ans => userInput.includes(ans.toLowerCase()));
+
+        if (isCorrect) {
+            feedback.className = "feedback-box correct";
+            feedback.innerHTML = `<div class="explanation-title">⭕ 정답입니다!</div><div class="explanation-content">${explanations[qNum]}</div>`;
+            scoreCard[qNum] = true;
+        } else {
+            feedback.className = "feedback-box incorrect";
+            feedback.innerHTML = `<div class="explanation-title">❌ 오답입니다. (인정 범위: ${correctArray.join(', ')})</div><div class="explanation-content">${explanations[qNum]}</div>`;
+            scoreCard[qNum] = false;
+        }
+        updateSummary();
+    }
+
+    function checkEssay(qNum) {
+        const userInput = document.getElementById(`q${qNum}-input`).value.trim();
+        const feedback = document.getElementById(`feedback-${qNum}`);
+
+        if (!userInput) {
+            alert("내용을 입력한 후 피드백을 확인하세요!");
+            return;
+        }
+
+        const data = explanations[qNum];
+        let matchedKeywords = [];
+        data.keywords.forEach(kw => {
+            if (userInput.toLowerCase().includes(kw.toLowerCase())) {
+                matchedKeywords.push(kw);
+            }
+        });
+
+        feedback.className = "feedback-box essay-feedback";
+        feedback.innerHTML = `
+            <div class="explanation-title">📝 서술형 채점 가이드 및 예시 가답안</div>
+            <div class="explanation-content">
+                ${data.modelAnswer}
+                <br><br>
+                <b>[자가 검증 핵심 키워드 매칭결과]</b><br>
+                - 현재 제출 문장 내 포함된 마케팅 평가 키워드: <span style="color:blue; font-weight:bold;">[${matchedKeywords.join(', ')}]</span> (총 ${data.keywords.length}개 중 ${matchedKeywords.length}개 일치)<br>
+                - 강의 자료에 입각한 원문 마케팅 용어 기술력을 점검해 보세요!
+            </div>
+        `;
+    }
+
+    function updateSummary() {
+        let score = 0;
+        let totalChecked = 0;
+        for (let i = 1; i <= 30; i++) {
+            if (scoreCard[i] !== undefined) {
+                totalChecked++;
+                if (scoreCard[i] === true) score++;
+            }
+        }
+        
+        const summaryBox = document.getElementById("total-score-box");
+        summaryBox.innerHTML = `현재 채점 확인 문제: ${totalChecked}/30 문항<br>객관식 및 단답형 누적 스코어: <span style="color:var(--error-color); font-size:28px;">${score}</span> / 30 점`;
+    }
+</script>
+
+</body>
+</html>
