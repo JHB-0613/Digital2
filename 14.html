@@ -563,7 +563,7 @@
         11: "경쟁 상품들과 구별되는 자사 게임만의 고유한 매력과 강력한 가치 제안을 뜻하는 전공 용어는 셀링 포인트(Selling Point)입니다.",
         12: "아바타 꾸미기 등을 통해 자신만의 독창적인 정체성을 가상 세계 속에 투영하는 재미의 영문 정답어는 'Expression'입니다.",
         13: "미지의 구역을 개척하고 새로운 환경 요소를 개방해 나가는 기획적 재미의 영문 정답어는 'Discovery'입니다.",
-        14: "유저의 조작 행위 결과의 성공과 실패 여부를 사운드, 시각 이펙트로 즉각 돌려주어 인지시키는 장치는 '피드백(Feedback)'입니다.",
+        14: "유저의 조작 행위 결과의 성공และ 실패 여부를 사운드, 시각 이펙트로 즉각 돌려주어 인지시키는 장치는 '피드백(Feedback)'입니다.",
         15: "타인과의 상호 교류, 길드 친목 시스템을 통해 유대감을 공유하는 재미의 정식 영문 명칭은 'Fellowship'입니다.",
         16: {
             modelAnswer: "<b>[모범 답안]</b> 추상적인 '성취감'을 실물 시스템으로 구현하기 위해서는 기획 시스템의 4대 구성요소를 유기적으로 엮어야 합니다. 첫째, 유저가 도전할 명확한 '목표'와 제한 시간·횟수 같은 명확한 제약 '규칙'을 선언해야 합니다. 둘째, 유저의 실력과 연동되는 적절한 '난이도' 밸런싱 채널이 배치되어야 합니다. 셋째, 유저의 도달 성공 및 실패 행위 결과값을 즉각 사운드와 시각 효과로 알리는 '피드백'이 보장되어야 하며, 마지막으로 레벨업, 희귀 아이템 등 지속할 동기를 부여하는 '보상 메커니즘'을 톱니바퀴처럼 맞물리게 설계해야 합니다.",
@@ -622,8 +622,15 @@
     }
 
     function checkEssay(qNum) {
-        const userInput = document.getElementById(`q${qNum}-input`).value.trim();
-        const feedback = document.getElementById(`feedback-${qNum}`);
+        const userInputElement = document.getElementById(`q${qNum}-input`);
+        const feedbackElement = document.getElementById(`feedback-${qNum}`);
+
+        if (!userInputElement || !feedbackElement) {
+            console.error(`요소를 찾을 수 없습니다. qNum: ${qNum}`);
+            return;
+        }
+
+        const userInput = userInputElement.value.trim();
 
         if (!userInput) {
             alert("내용을 입력한 후 피드백을 확인하세요!");
@@ -632,14 +639,20 @@
 
         const data = explanations[qNum];
         let matchedKeywords = [];
-        data.keywords.forEach(kw => {
-            if (userInput.toLowerCase().includes(kw.toLowerCase())) {
-                matchedKeywords.push(kw);
-            }
-        });
+        
+        if (data && data.keywords) {
+            data.keywords.forEach(kw => {
+                // String 변환을 보장하여 문자열 에러 방지
+                const userString = String(userInput).toLowerCase();
+                const keywordString = String(kw).toLowerCase();
+                if (userString.includes(keywordString)) {
+                    matchedKeywords.push(kw);
+                }
+            });
+        }
 
-        feedback.className = "feedback-box essay-feedback";
-        feedback.innerHTML = `
+        feedbackElement.className = "feedback-box essay-feedback";
+        feedbackElement.innerHTML = `
             <div class="explanation-title">📝 서술형 채점 가이드 및 예시 가답안</div>
             <div class="explanation-content">
                 ${data.modelAnswer}
@@ -662,7 +675,9 @@
         }
         
         const summaryBox = document.getElementById("total-score-box");
-        summaryBox.innerHTML = `현재 채점 확인 문제: ${totalChecked}/15 문항<br>객관식 및 단답형 누적 점수: <span style="color:var(--error-color); font-size:28px;">${score}</span> / 15 점`;
+        if (summaryBox) {
+            summaryBox.innerHTML = `현재 채점 확인 문제: ${totalChecked}/15 문항<br>객관식 및 단답형 누적 점수: <span style="color:var(--error-color); font-size:28px;">${score}</span> / 15 점`;
+        }
     }
 </script>
 
