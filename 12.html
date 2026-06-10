@@ -280,6 +280,893 @@
 
 <header>
     <h1>중앙대학교 게임기획 학습 평가 시스템</h1>
+    <p>12주차 강의자료 기반 맞춤형 평가 (사지선다 20문항 + 단답형 10문항 + 서술형 3문항)</p>
+</header>
+
+<!-- 주차별 이동 버튼 컨테이너 -->
+<div class="nav-container">
+    <button class="nav-btn" onclick="location.href='index.html';">9주차</button>
+    <button class="nav-btn" onclick="location.href='10.html';">10주차</button>
+    <button class="nav-btn" onclick="location.href='11.html';">11주차</button>
+    <button class="nav-btn active" onclick="location.reload();">12주차</button>
+    <button class="nav-btn disabled" onclick="alert('13주차 자료는 준비 중입니다.')">13주차</button>
+    <button class="nav-btn disabled" onclick="alert('14주차 자료는 준비 중입니다.')">14주차</button>
+</div>
+
+<main>
+    <div class="quiz-intro">
+        <strong>💡 12주차 마케팅 평가 안내:</strong> 본 퀴즈는 제공된 12주차 강의자료('게임마케팅')를 바탕으로 출제되었습니다. 마케팅의 본질적 정의, 3C 분석 및 SWOT 매트릭스 도출 기법, STP(시장세분화, 표적시장, 포지셔닝) 분석 단계의 게임적 응용, 모바일 트래픽 수치 지표(MAU, DAU, NRU, 고착도), 브랜딩과 BI(로고, 슬로건, 색, 심볼) 이론을 평가합니다.
+    </div>
+
+    <!-- PART 1: 객관식 20문항 -->
+    <div class="section-title">PART 1. 사지선다형 객관식 문항 (20문제)</div>
+
+    <!-- Q1 -->
+    <div class="question-card" id="q1-card">
+        <div class="question-header">
+            <span class="q-num">Q1</span>
+            <div>강의자료에서 정의한 '마케팅(market-ing)'의 궁극적인 실행 목적과 가장 일치하는 것은 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q1" value="1"><input type="radio" name="q1" value="1"> 타겟의 호감을 무시하고 일방적인 주입식 목소리를 전달하는 행위</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q1" value="2"><input type="radio" name="q1" value="2"> 특정한 가치를 만들어 제공하고 목표 대상과 긍정적 관계를 구축하여 궁극적으로 자신이 원하는 바를 획득하는 활동</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q1" value="3"><input type="radio" name="q1" value="3"> 소비자를 속여 게임에 없는 허위 시스템을 광고하여 단기 판매액을 올리는 사기성 행위</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q1" value="4"><input type="radio" name="q1" value="4"> 제품 개발 과정을 전면 중단하고 오직 포스터 홍보에만 모든 예산을 투입하는 자원 제어</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(1, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-1"></div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-card" id="q2-card">
+        <div class="question-header">
+            <span class="q-num">Q2</span>
+            <div>게임 마케팅 전략 수립 과정에서 가장 이상적인 마케팅 전략의 수립 시작 시점은 언제인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q2" value="1"> 게임의 모든 개발이 완료된 정식 오픈 직후 단계</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q2" value="2"> 게임을 시장에 정식 런칭하기 바로 전날 밤</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q2" value="3"> 초기 게임 기획 과정에서부터 같이 시작하는 것</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q2" value="4"> 유저들의 단체 탈출로 인해 경제 인플레이션이 발생한 수습 단계</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(2, 3)">정답 확인</button>
+        <div class="feedback-box" id="feedback-2"></div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-card" id="q3-card">
+        <div class="question-header">
+            <span class="q-num">Q3</span>
+            <div>모바일 게임 마케팅 환경 분석을 위해 수집해야 하는 전통적 3C 분석의 세 가지 구성 영역이 올바르게 묶인 것은?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q3" value="1"> Cost(비용), Cash(현금), Coding(코딩)</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q3" value="2"> Customer(고객), Competitor(경쟁사), Company/Product(자사)</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q3" value="3"> Concept(콘셉트), Character(캐릭터), Culture(문화)</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q3" value="4"> Content(콘텐츠), Control(조작), Cloud(클라우드)</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(3, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-3"></div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-card" id="q4-card">
+        <div class="question-header">
+            <span class="q-num">Q4</span>
+            <div>마케팅 과정 중 '게임 분석' 단계에서 수립하는 CVP(Customer Value Proposition)의 명확한 정의는 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q4" value="1"> 소수의 관심 유저 그룹을 모아 버그를 테스트하는 정성 조사 방식</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q4" value="2"> 경쟁작의 매출 순위 추이 데이터를 분산 저정하는 데이터베이스</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q4" value="3"> 제품이 가지고 있는 강점 또는 다른 제품과 차별되는 점을 소비자에게 강조해서 전달하는 것</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q4" value="4"> 하루에 게임에 접속하는 실질 활동 이용자 수의 비례 곡선</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(4, 3)">정답 확인</button>
+        <div class="feedback-box" id="feedback-4"></div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-card" id="q5-card">
+        <div class="question-header">
+            <span class="q-num">Q5</span>
+            <div>마케팅 데이터 중 '초기 마케팅에서 가장 중요한 지표'로 활용되며, 특정 기간 내에 새롭게 게임에 가입하고 등록한 유저 수치를 뜻하는 지표 명칭은?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q5" value="1"> MAU (Monthly Active Users)</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q5" value="2"> MCU (Maximum Concurrent Users)</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q5" value="3"> NRU (New Registered Users)</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q5" value="4"> RRU (Return Registered Users)</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(5, 3)">정답 확인</button>
+        <div class="feedback-box" id="feedback-5"></div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-card" id="q6-card">
+        <div class="question-header">
+            <span class="q-num">Q6</span>
+            <div>"한 달간 유저가 게임을 얼마나 자주 방문하는가?", "재실행 빈도가 얼마나 높은가?"를 측정하는 유저 '고착도(Stickiness)'의 공식으로 올바른 것은?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q6" value="1"> (MAU / DAU) * 100</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q6" value="2"> (DAU / MAU) * 100</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q6" value="3"> (NRU / MCU) * 100</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q6" value="4"> (RRU / DAU) * 100</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(6, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-6"></div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-card" id="q7-card">
+        <div class="question-header">
+            <span class="q-num">Q7</span>
+            <div>강의자료에 제시된 모바일 인덱스 데이터 분석 사례 중, '앱 설치 수'는 11번가가 1위를 차지했으나 '실 사용자 및 고착도' 지표에서 압도적 우위를 보인 이커머스 앱은 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q7" value="1"> 위메프</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q7" value="2"> 쿠팡</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q7" value="3"> G마켓</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q7" value="4"> 티몬</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(7, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-7"></div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-card" id="q8-card">
+        <div class="question-header">
+            <span class="q-num">Q8</span>
+            <div>타겟 분석 단계 중 '인구통계학적 방법'에 해당하는 기준 요소를 가장 올바르게 나열한 것은?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q8" value="1"> 성격, 라이프 스타일, 심리적 불안도</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q8" value="2"> 연령, 성별, 직업, 사는 곳, 학력, 종교, 국적</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q8" value="3"> 브랜드 충성도, 영구 아이템 구매 패턴, 접속 주기</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q8" value="4"> 밀리터리 덕후 성향, 연예인 덕후 성향</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(8, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-8"></div>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-card" id="q9-card">
+        <div class="question-header">
+            <span class="q-num">Q9</span>
+            <div>SWOT 분석 매트릭스를 구성할 때, 분석 단위 중 '기업 내부 환경'을 평가하여 강점과 약점을 도출하는 조합은 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q9" value="1"> Opportunities (기회) & Threats (위협)</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q9" value="2"> Strengths (강점) & Weaknesses (약점)</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q9" value="3"> Strengths (강점) & Opportunities (기회)</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q9" value="4"> Weaknesses (약점) & Threats (위협)</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(9, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-9"></div>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-card" id="q10-card">
+        <div class="question-header">
+            <span class="q-num">Q10</span>
+            <div>펄어비스의 SWOT 분석 사례 중 '강점(Strength)' 요인으로 명시된 자사 고유의 핵심 경쟁력은 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q10" value="1"> 글로벌 인지도가 높은 서머너즈 워 IP 보유</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q10" value="2"> 자체 게임엔진 제작 능력 보유</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q10" value="3"> 모바일 단일 플랫폼 하이브(HIVE) 구축 및 운영 노하우</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q10" value="4"> 상대적으로 매우 짧은 신작 개발 기간</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(10, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-10"></div>
+    </div>
+
+    <!-- Q11 -->
+    <div class="question-card" id="q11-card">
+        <div class="question-header">
+            <span class="q-num">Q11</span>
+            <div>강의자료에 제시된 모바일 RPG &lt;뉴본(NEW BORN)&gt;의 SWOT 분석 사례 중, '위협(Threat)' 요인으로 매칭된 사업적 한계는 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q11" value="1"> 신생 게임사로서 시장 주목도와 인지도가 매우 낮음</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q11" value="2"> 3인칭 슈팅과 RPG 장르 조합의 복잡성</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q11" value="3"> 카카오톡 플랫폼 입성 실패로 인한 이용자 확보 어려움</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q11" value="4"> 배그모바일과 포트나이트의 영향으로 장르 매출 전체 감소</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(11, 3)">정답 확인</button>
+        <div class="feedback-box" id="feedback-11"></div>
+    </div>
+
+    <!-- Q12 -->
+    <div class="question-card" id="q12-card">
+        <div class="question-header">
+            <span class="q-num">Q12</span>
+            <div>대학내일 20대연구소의 인사이트 보고서에 따른 'Z세대'의 단판 게임(AOS, 슈팅 등) 선호 이유와 일치하지 않는 것은?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q12" value="1"> 모든 유저가 레벨 1에서 평등하게 시작하기 때문에</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q12" value="2"> 팀 내 조합이나 맵에 따라 게임 양상이 달라져 매번 새로운 느낌을 주기 때문에</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q12" value="3"> 과금 요소가 적고 순수 게임 실력에 승패가 좌우되기 때문에</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q12" value="4"> 비슷한 사냥 레이드와 반복적인 시나리오 세계관 퀘스트를 수행할 수 있기 때문에</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(12, 4)">정답 확인</button>
+        <div class="feedback-box" id="feedback-12"></div>
+    </div>
+
+    <!-- Q13 -->
+    <div class="question-card" id="q13-card">
+        <div class="question-header">
+            <span class="q-num">Q13</span>
+            <div>게이머 플레이 동기 유형 분류 중, "캐릭터 꾸미기, 디자인, 역할놀이 등을 통해 게임 속에서 자신의 정체성을 마음껏 표출하고 싶어 하는 유저 그룹"의 명칭은?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q13" value="1"> 스릴 시커 (Thrill-Seeker)</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q13" value="2"> 표현주의자 (Expressionist)</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q13" value="3"> 사상가 (Thinker)</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q13" value="4"> 보물 사냥꾼 (Treasure Hunter)</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(13, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-13"></div>
+    </div>
+
+    <!-- Q14 -->
+    <div class="question-card" id="q14-card">
+        <div class="question-header">
+            <span class="q-num">Q14</span>
+            <div>STP 마케팅 전략 중, "세분화된 고객 집단 중 자사의 자원과 게임 콘셉트를 고려하여 집중적으로 공략할 주요 구매 집단을 최종 선정하는 단계"는 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q14" value="1"> Segmentation (시장 세분화)</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q14" value="2"> Targeting (표적시장 선정)</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q14" value="3"> Positioning (포지셔닝 각인)</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q14" value="4"> Branding (브랜드 소유 표시)</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(14, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-14"></div>
+    </div>
+
+    <!-- Q15 -->
+    <div class="question-card" id="q15-card">
+        <div class="question-header">
+            <span class="q-num">Q15</span>
+            <div>잡코리아의 기업 포지셔닝 인상 조사 결과 중, '유행에 민감한 20대 중반 여성, 세련됨, 대중적' 이미지로 소비자 마음속에 가장 뚜렷하게 각인되어 있는 기업 브랜드는 어디인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q15" value="1"> 삼성</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q15" value="2"> 현대자동차</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q15" value="3"> SK</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q15" value="4"> 포스코</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(15, 3)">정답 확인</button>
+        <div class="feedback-box" id="feedback-15"></div>
+    </div>
+
+    <!-- Q16 -->
+    <div class="question-card" id="q16-card">
+        <div class="question-header">
+            <span class="q-num">Q16</span>
+            <div>강의자료에서 닌텐도 스위치(Nintendo Switch)가 소니 PS4나 마이크로소프트 XBOX ONE의 '고성능 고스펙 포지션'과 구별하여 성공적으로 각인시킨 핵심 정체성 가치는 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q16" value="1"> 하이퍼 리얼리즘 시각 렌더링 스펙</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q16" value="2"> 거대한 서버 기반 다중 접속 가상 커뮤니티 환경</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q16" value="3"> "가족과 함께" 즐길 수 있는 간편한 "휴대용" 하드웨어 가치</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q16" value="4"> 인앱 결제를 전적으로 강제하는 하드코어 성인 랭킹 모델</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(16, 3)">정답 확인</button>
+        <div class="feedback-box" id="feedback-16"></div>
+    </div>
+
+    <!-- Q17 -->
+    <div class="question-card" id="q17-card">
+        <div class="question-header">
+            <span class="q-num">Q17</span>
+            <div>소비자 유형 분류 중, 쿠폰, 마일리지, 1+1 세일 행사에 적극적으로 반응하며 특정 브랜드에 집착하기보다는 실질적인 실용 가치 획득 자체를 중시하는 유형은?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q17" value="1"> 카테고리 전문가</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q17" value="2"> 실용주의자</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q17" value="3"> 냉소주의자</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q17" value="4"> 브랜드 로열리스트</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(17, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-17"></div>
+    </div>
+
+    <!-- Q18 -->
+    <div class="question-card" id="q18-card">
+        <div class="question-header">
+            <span class="q-num">Q18</span>
+            <div>매운 라면의 포지셔닝 인지 사례 중, 소비자의 필터 속에 "엄청나게 매운 라면"이라는 키워드를 던졌을 때 삼양 브랜드를 중심으로 가장 최우선 연상작용을 일으키는 메인 히트 제품군은 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q18" value="1"> 진라면 순한맛</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q18" value="2"> 불닭볶음면 시리즈</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q18" value="3"> 꼬꼬면 시리즈</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q18" value="4"> 틈새라면</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(18, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-18"></div>
+    </div>
+
+    <!-- Q19 -->
+    <div class="question-card" id="q19-card">
+        <div class="question-header">
+            <span class="q-num">Q19</span>
+            <div>브랜드의 역사적 기원과 관련하여, 나이키(Nike)가 'Just Do It' 슬로건 광고를 전개할 때 취하는 효과적인 브랜딩 연출적 특징은 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q19" value="1"> 자사 운동화의 쿠션 가격과 가공 소재 스펙만 수치화하여 나열한다.</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q19" value="2"> 신발 상품에 대한 세부 이야기를 완전히 배제하는 대신 위대한 운동선수와 경기에 의도를 둔 경의를 표해 인상을 각인한다.</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q19" value="3"> 경쟁사 제품보다 자사 가격이 얼마나 저렴한지 비교 우위 퍼센트만 강조한다.</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q19" value="4"> 가축에 도장을 찍어 소유주를 정표하던 고대 목축업의 이미지를 실물화하여 노출한다.</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(19, 2)">정답 확인</button>
+        <div class="feedback-box" id="feedback-19"></div>
+    </div>
+
+    <!-- Q20 -->
+    <div class="question-card" id="q20-card">
+        <div class="question-header">
+            <span class="q-num">Q20</span>
+            <div>국민 퍼즐 게임인 &lt;애니팡(Ani Pang)&gt;의 성공 요인 중 '좋은 제목'의 요건과 관련하여 명시된 기획적 해석은 무엇인가?</div>
+        </div>
+        <ul class="options-list">
+            <li class="option-item"><label class="option-label"><input type="radio" name="q20" value="1"> 애니(Ani/Any)와 팡의 결합으로 '누구나 즐기고 팡팡 터진다'는 성격을 제목만으로 직관적으로 짐작할 수 있게 했다.</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q20" value="2"> 영문 문장 레이아웃이 15글자 이상으로 구성되어 고관여 하드코어 유저층에게 신비감을 부여했다.</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q20" value="3"> 하부 판타지 영웅 시나리오 서사의 도입부 결말을 은유적인 문법으로 축약했다.</label></li>
+            <li class="option-item"><label class="option-label"><input type="radio" name="q20" value="4"> 유행어나 패러디 요소를 영구 배제하여 고전적인 격식만 표현했다.</label></li>
+        </ul>
+        <button class="action-btn" onclick="checkMultipleChoice(20, 1)">정답 확인</button>
+        <div class="feedback-box" id="feedback-20"></div>
+    </div>
+
+
+    <!-- PART 2: 단답형 10문항 -->
+    <div class="section-title">PART 2. 주관식 단답형 문항 (10문제)</div>
+
+    <!-- Q21 -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q21</span>
+            <div>특정한 회사, 제품, 서비스를 다른 경쟁사와 명확히 식별하고 가리킬 때 쓰이는 고유의 문장 및 시각 기호 명칭을 지칭하는 용어를 쓰시오.[span_0](start_span)[span_0](end_span)</div>
+        </div>
+        <div class="text-input-container"><input type="text" id="q21-input" class="short-answer-input" placeholder="정답을 입력하세요"></div>
+        <button class="action-btn" onclick="checkShortAnswer(21, ['브랜드', 'brand'])">정답 확인</button>
+        <div class="feedback-box" id="feedback-21"></div>
+    </div>
+
+    <!-- Q22 -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q22</span>
+            <div>이동 수치 지표 중 '일별 실질 활동 이용자 수'를 뜻하는 모바일 분석 핵심 마케팅 약어 용어(3글자)를 쓰시오.[span_1](start_span)[span_1](end_span)</div>
+        </div>
+        <div class="text-input-container"><input type="text" id="q22-input" class="short-answer-input" placeholder="정답을 입력하세요"></div>
+        <button class="action-btn" onclick="checkShortAnswer(22, ['dau'])">정답 확인</button>
+        <div class="feedback-box" id="feedback-22"></div>
+    </div>
+
+    <!-- Q23 -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q23</span>
+            <div>이동 수치 지표 중 '월간 실질 활동 이용자 수'를 뜻하는 모바일 분석 핵심 마케팅 약어 용어(3글자)를 쓰시오.[span_2](start_span)[span_2](end_span)</div>
+        </div>
+        <div class="text-input-container"><input type="text" id="q23-input" class="short-answer-input" placeholder="정답을 입력하세요"></div>
+        <button class="action-btn" onclick="checkShortAnswer(23, ['mau'])">정답 확인</button>
+        <div class="feedback-box" id="feedback-23"></div>
+    </div>
+
+    <!-- Q24 -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q24</span>
+            <div>DAU를 MAU로 나눈 뒤 100을 곱해 산출하며, 수치가 높을수록 재실행 빈도와 유저 활성화가 강력함을 입증하는 트래픽 마케팅 용어는 무엇인가?[span_3](start_span)[span_3](end_span)</div>
+        </div>
+        <div class="text-input-container"><input type="text" id="q24-input" class="short-answer-input" placeholder="정답을 입력하세요"></div>
+        <button class="action-btn" onclick="checkShortAnswer(24, ['고착도', 'stickiness'])">정답 확인</button>
+        <div class="feedback-box" id="feedback-24"></div>
+    </div>
+
+    <!-- Q25 -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q25</span>
+            <div>기업 내부의 강점·약점과 기업 외부의 기회·위협 요인을 도출하여 현 회사의 큰 그림 상황을 종합 진단하는 매트릭스 분석 기법 명칭을 쓰시오.[span_4](start_span)[span_4](end_span)</div>
+        </div>
+        <div class="text-input-container"><input type="text" id="q25-input" class="short-answer-input" placeholder="정답을 입력하세요"></div>
+        <button class="action-btn" onclick="checkShortAnswer(25, ['swot', 'swot 분석', 'swot분석'])">정답 확인</button>
+        <div class="feedback-box" id="feedback-25"></div>
+    </div>
+
+    <!-- Q26 -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q26</span>
+            <div>STP 분석 모델의 구성 단계 중, '타겟 고객의 마음속에 경쟁 상품에 비해 우리 제품이 보다 독창적이고 우월한 이미지로 각인되도록 위치를 선점하는 활동'을 뜻하는 용어는 무엇인가?[span_5](start_span)[span_5](end_span)</div>
+        </div>
+        <div class="text-input-container"><input type="text" id="q25-input" class="short-answer-input" placeholder="정답을 입력하세요"></div>
+        <button class="action-btn" onclick="checkShortAnswer(26, ['포지셔닝', 'positioning'])">정답 확인</button>
+        <div class="feedback-box" id="feedback-26"></div>
+    </div>
+
+    <!-- Q27 -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q27</span>
+            <div>고객 세분화 분석 데이터 기법 중, 최근성(Recency), 구매빈도(Frequency), 구매금액(Monetary)의 세 축을 기점으로 충성 및 휴면 이탈 유저층을 군집화 분류하는 평가 기법 명칭은?[span_6](start_span)[span_6](end_span)</div>
+        </div>
+        <div class="text-input-container"><input type="text" id="q27-input" class="short-answer-input" placeholder="정답을 입력하세요"></div>
+        <button class="action-btn" onclick="checkShortAnswer(27, ['rfm', 'rfm 분석', 'rfm 기법'])">정답 확인</button>
+        <div class="feedback-box" id="feedback-27"></div>
+    </div>
+
+    <!-- Q28 -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q28</span>
+            <div>소비자에게 자사 브랜드 정체성을 한눈에 명확히 인지시키기 위해 로고, 슬로건, 전용 색상, 심볼 등의 시각 무형 자산들을 총체적으로 통합하여 명세화한 정체성 요소를 뜻하는 약어는?[span_7](start_span)[span_7](end_span)</div>
+        </div>
+        <div class="text-input-container"><input type="text" id="q28-input" class="short-answer-input" placeholder="정답을 입력하세요"></div>
+        <button class="action-btn" onclick="checkShortAnswer(28, ['bi', 'brand identity'])">정답 확인</button>
+        <div class="feedback-box" id="feedback-28"></div>
+    </div>
+
+    <!-- Q29 -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q29</span>
+            <div>제목 하나만으로는 온전히 다 기술할 수 없는 게임이 지향하는 가치나 브랜드 철학을 요약하여 전달하며, '짜릿한 스피드의 쾌감'처럼 호기심을 유발하는 한 줄 문구를 무엇이라 부르는가?[span_8](start_span)[span_8](end_span)</div>
+        </div>
+        <div class="text-input-container"><input type="text" id="q29-input" class="short-answer-input" placeholder="정답을 입력하세요"></div>
+        <button class="action-btn" onclick="checkShortAnswer(29, ['슬로건', 'slogan'])">정답 확인</button>
+        <div class="feedback-box" id="feedback-29"></div>
+    </div>
+
+    <!-- Q30 -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q30</span>
+            <div>&lt;로스트아크&gt;에서 시작되어 이마트24, 맘스터치 콜라보 매진 대란을 일으킨 사례처럼, 특정 인물·동물·사물의 핵심 특징을 시각적으로 단순화하여 유저층에게 강력히 어필하는 BI 요소를 무엇이라 하는가?[span_9](start_span)[span_9](end_span)</div>
+        </div>
+        <div class="text-input-container"><input type="text" id="q30-input" class="short-answer-input" placeholder="정답을 입력하세요"></div>
+        <button class="action-btn" onclick="checkShortAnswer(30, ['심볼', 'symbol', '모코코'])">정답 확인</button>
+        <div class="feedback-box" id="feedback-30"></div>
+    </div>
+
+
+    <!-- PART 3: 서술형 3문항 -->
+    <div class="section-title">PART 3. 주관식 서술형 문항 (3문제)</div>
+
+    <!-- Q31 -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q31</span>
+            <div><strong>[서술형]</strong> 모바일 게임 비즈니스 및 경제 트래픽 관리 지표 관점에서 "단순히 다운로드 수나 앱 설치 수(Installation)가 1위를 달성한 지표만으로는 온전한 성공으로 보기 어려운 이유"가 무엇인지 고착도(Stickiness) 개념과 연계하여 강의 자료 내용을 토대로 서술하시오.[span_10](start_span)[span_10](end_span)</div>
+        </div>
+        <div class="text-input-container"><textarea id="q31-input" class="essay-answer-input" placeholder="여기에 서술형 답안을 작성하세요. 작성 후 아래 버튼을 누르면 모범 답안 및 채점 핵심 가이드가 열립니다."></textarea></div>
+        <button class="action-btn" onclick="checkEssay(31)">작성 완료 및 피드백 보기</button>
+        <div class="feedback-box" id="feedback-31"></div>
+    </div>
+
+    <!-- Q32 -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q32</span>
+            <div><strong>[서술형]</strong> 세대별 마케팅 세분화 조사 결과와 관련하여, 'Z세대 유저 그룹'이 캐릭터 조합이나 단판성 게임 양상(AOS, 슈팅 등)에 매력을 느끼고 반복 수행하는 이유를 '밀레니얼 세대 유저 그룹'의 가치 성향과 대조하여 구체적으로 기술하시오.[span_11](start_span)[span_11](end_span)</div>
+        </div>
+        <div class="text-input-container"><textarea id="q32-input" class="essay-answer-input" placeholder="여기에 서술형 답안을 작성하세요. 작성 후 아래 버튼을 누르면 모범 답안 및 채점 핵심 가이드가 열립니다."></textarea></div>
+        <button class="action-btn" onclick="checkEssay(32)">작성 완료 및 피드백 보기</button>
+        <div class="feedback-box" id="feedback-32"></div>
+    </div>
+
+    <!-- Q33 -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="q-num">Q33</span>
+            <div><strong>[서술형]</strong> 게임 기획자가 마케팅 포지셔닝(Positioning) 전략을 구상하기 위해 도출하는 포지셔닝 기술문(Positioning Statement)의 작성 구성 요건과, 수치 중심 설명 방식보다 타겟 소비자가 체감하는 감정 중심 브랜딩의 중요성을 서술하시오.[span_12](start_span)[span_12](end_span)</div>
+        </div>
+        <div class="text-input-container"><textarea id="q33-input" class="essay-answer-input" placeholder="여기에 서술형 답안을 작성하세요. 작성 후 아래 버튼을 누르면 모범 답안 및 채점 핵심 가이드가 열립니다."></textarea></div>
+        <button class="action-btn" onclick="checkEssay(33)">작성 완료 및 피드백 보기</button>
+        <div class="feedback-box" id="feedback-33"></div>
+    </div>
+
+    <!-- 종합 스코어 보드 -->
+    <div class="summary-box">
+        <h3>🎉 12주차 퀴즈 수행 결과 요약</h3>
+        <p>문제를 모두 풀고 정답 확인을 진행해 보세요!</p>
+        <div class="score-display" id="total-score-box">객관식/단답형 채점 대기 중</div>
+        <p style="font-size:12px; color:#666;">* 주관식 서술형 3문제는 하단의 모범답안 가이드라인을 참조하여 스스로 자가 채점을 진행해 주세요.</p>
+    </div>
+</main>
+
+<script>
+    // 각 문제별 해설 및 정답 맵 정의
+    const explanations = {
+        1: "강의자료 4페이지 마케팅의 본질 정의에 따르면 단순 광고 주입이 아니라, 특정한 가치를 창출·제공하여 유저와 긍정적인 관계를 쌓고 원하는 목적을 성취해 내는 전반적인 순환 경영 활동입니다.",
+        2: "마케팅 활동은 런칭 직전에 본격 개시하나, 그 상위 마케팅 전략 수립(3C, STP)은 초기 기획 과정 단계에서부터 함께 조화롭게 융합 전개하는 것이 가장 이상적입니다(4페이지).",
+        3: "모바일 마케팅 초기 분석 기반의 3C 매커니즘은 Customer(고객층), Competitor(경쟁 구도 게임), Company/Product(자사 개발 상품력)로 매칭 연동됩니다(4페이지).",
+        4: "CVP(Customer Value Proposition)는 우리 개발 상품이 고유하게 지니는 장점이자 타사 제품군과 구조적으로 구별되는 고유 차별점을 소비자에게 직관적으로 명세 및 강조하여 전달하는 핵심 가치 제안서입니다(4페이지).",
+        5: "초기 마케팅 지표 관리 시 핵심 우선 순위로 다루어지는 NRU(New Registered Users)는 해당 분석 주기에 새롭게 유입 가입한 청정 유저 스펙입니다(4페이지).",
+        6: "유저 고착도(Stickiness)는 '일별 활동 유저(DAU)'를 '월별 활동 유저(MAU)' 지표값으로 나눈 뒤 100을 곱하여 산출하는 고착화 활성 공식 비율 지표입니다(4~5페이지).",
+        7: "마케팅 지표 분석 사례(5페이지)에 명시된 대로 11번가는 설치량은 앞섰으나 유저들이 얼마나 자주 진입하고 활성화되는지 보여주는 실사용과 고착도 면에서는 쿠팡이 압도적인 수치를 입증했습니다.",
+        8: "인구통계학적 분석 필터 요건은 연령, 성별, 직업, 소득, 학력, 소속 지역 등 인간 사회 구조의 외적 조건 데이터를 기반으로 타겟을 매칭 분류하는 전통적 기준입니다(5~6페이지).",
+        9: "SWOT 4분면 매트릭스 설계 상 기업이 내부적으로 완전히 컨트롤 가능한 환경과 경쟁력을 저울질하는 분석 영역은 Strength(강점)와 Weakness(약점)의 내부 조합 영역입니다(5페이지).",
+        10: "펄어비스 SWOT 분석 명세 사례(5페이지)에 따르면, 컴투스의 서머너즈워 IP 자산 파워 강점과 구별되는 펄어비스만의 내부 강점은 '자체 게임엔진 제작 능력'입니다.",
+        11: "모바일 슈팅 RPG 뉴본(NEW BORN) 분석 도출 데이터(5페이지) 중 외부 환경 위협(Threat) 요인은 '카카오톡 플랫폼 입성 실패'에 따른 유저 인원 도달 및 모객 확보의 치명적인 허들 패널티였습니다.",
+        12: "Z세대는 레벨이나 장비 격차가 누적 지속되는 RPG의 사냥 반복 구조를 선호하기보다 단판성 공평 지표(AOS)를 선호합니다. 세계관 스토리와 보상 지속성을 중시하는 군집은 밀레니얼 세대입니다(5~6페이지).",
+        13: "게임 동기 부여 모델(6페이지)에 의거하여 캐릭터 디자인 코스튬, 성별 역할극, 정체성 외적 표출을 중심 가치로 두어 유입을 실현하는 집단은 'Expressionist(표현주의자)'입니다.",
+        14: "STP 마케팅 설계 순서 중 세분화 분류(S)를 끝낸 후, 자사의 수익 실현과 최적 적합도를 산정해 특정 그룹을 표적 공략 타겟으로 최종 배정 선언하는 행위는 Targeting(표적시장 선정)입니다(5~6페이지).",
+        15: "잡코리아 포지셔닝 인상 추적 지표 보고서(6페이지)에 따르면 '유행에 민감한 20대 중반 여성, 세련됨, 캐주얼, 대중성'의 정체성을 확보한 곳은 'SK'입니다.",
+        16: "닌텐도 스위치 브랜드 포지셔닝 전략(6~7페이지)은 기기 스펙 수치 경쟁을 우회하여 '휴대성'과 '가족과 함께 연대하여 소통하는 정서적 밸류'를 뚜렷하게 선점하여 성공했습니다.",
+        17: "소비 지표 성향 분류(7페이지) 중, 브랜드 자체에 로열티가 고착되지 않고 쿠폰 행사, 보상 혜택, 1+1 기획 수량 등 실리적 이득 가치 위주로 기민하게 움직이는 집단은 '실용주의자'입니다.",
+        18: "소비자 두뇌 필터 연상 작용 예시(7페이지)에 따르면 '엄청나게 매운 라면 브랜드 인상'의 구심점 지표를 형성해 하위 파생 변수(핵불닭, 불닭탕면)를 선점 제어하는 주자는 '불닭볶음면'입니다.",
+        19: "나이키의 위대한 브랜딩 가이드라인(7~8페이지)은 운동화 가죽이나 고무 밑창 스펙을 나열하는 단순 기술 설명을 과감히 배제하고, 위대한 스포츠 정신과 경기력에 리스펙트 경의를 표하는 방식으로 감성을 세뇌 각인시켰습니다.",
+        20: "애니팡의 좋은 네이밍 직관적 강점(8페이지)은 ANY(누구나)+PANG(터진다) 구조의 조합 약어로 구성되어, 이름 하나만으로도 게임의 라이트 캐주얼 성격과 퍼즐 규칙을 단박에 유추하도록 연상력을 확보했습니다.",
+        21: "강의자료 7페이지 명세에 따른 정답은 '브랜드' 혹은 'brand'입니다.",
+        22: "하루 동안 진입한 순수 독자 활동 이용자 수의 모바일 약어는 'DAU'입니다(4페이지).",
+        23: "한 달 동안 진입한 순수 독자 활동 이용자 수의 모바일 약어는 'MAU'입니다(4페이지).",
+        24: "방문 빈도 지표이자 높은 수치일수록 재접속률이 탄탄함을 대변하는 정답어는 '고착도' 또는 'stickiness'입니다(4~5페이지).",
+        25: "기업 내부와 외부 환경인 S, W, O, T 요소를 교차 종합 분석하는 기법 정답은 'SWOT' 또는 'SWOT 분석'입니다(5페이지).",
+        26: "경쟁사 대비 우리 제품의 우월 정체성 이미지를 타겟의 두뇌에 선점 각인시키는 STP 3단계 정답은 '포지셔닝' 또는 'positioning'입니다(5~6페이지).",
+        27: "최근성(Recency), 빈도(Frequency), 금액(Monetary) 데이터 분석 군집화 지표 모델의 정답 명칭은 'RFM'입니다(6페이지).",
+        28: "로고, 슬로건, 심볼, 색 등을 조합해 무형의 브랜드 가치를 시각 시선화한 요소의 정답 약어는 'BI' 또는 'Brand Identity'입니다(8페이지).",
+        29: "브랜드가 지향하는 철학과 이미지를 '빠름 빠름 빠름'처럼 각인하기 위해 도입하는 임팩트 단어 문구 정답은 '슬로건'입니다(8페이지).",
+        30: "모코코 굿즈 및 대란 사례처럼 특정 대상물의 특징을 극도로 직관 단순화하여 어필하는 BI 요약물 정답은 '심볼' 또는 'symbol'입니다(8~9페이지).",
+        31: {
+            modelAnswer: "<b>[모범 답안]</b> 모바일 게임의 설치 수나 다운로드 지표가 아무리 높게 나타나더라도, 유저가 한 달 동안 게임을 얼마나 자주 재방문하는지 측정하는 '고착도(Stickiness = DAU/MAU * 100)' 지표 수치가 낮다면 실질 유저가 활성화되지 않은 허수 상태를 의미하기 때문입니다. 진정한 게임 성공과 매출 실현을 위해서는 유입(유저 유입)뿐만 아니라, 유저들이 이탈하지 않고 지속적으로 붙어있을 만한 인게임 시스템 장치(일일 콘텐츠, 보상 순환 구조)를 고안하여 고착도를 상승시키고 재방문과 지속 플레이 트래픽을 상시 관리해야 장기 생존이 가능합니다.",
+            keywords: ["고착도", "Stickiness", "DAU", "MAU", "자주", "재방문", "지속 플레이", "유입", "장치", "활성화"]
+        },
+        32: {
+            modelAnswer: "<b>[모범 답안]</b> 강의자료 Z세대 조사 내용에 따르면, Z세대는 모든 유저가 동일한 레벨 1 조건에서 매판 새로 시작하고 과금 요소가 적어 오직 순수 실력 성장의 즐거움에 따라 승패가 판가름 나는 AOS나 슈팅 장르의 단판성 게임 양상을 압도적으로 선호합니다. 반면 밀레니얼 세대 유저 그룹은 사냥과 퀘스트가 비슷하게 무한 반복 누적되는 RPG 장르를 선호하는 비중이 컸으며, 그 내부 가치에서도 후기 밀레니얼은 '세계관과 스토리 서사'를 중시하고 전기 밀레니얼은 '노력한 만큼 반환되는 보상의 만족감'을 핵심 밸류로 중시하여 서로 게임을 즐기는 근본적인 동기 이유가 대조를 이룹니다.",
+            keywords: ["Z세대", "레벨 1", "단판", "과금", "실력 성장", "AOS", "슈팅", "밀레니얼", "RPG", "세계관", "스토리", "노력", "보상"]
+        },
+        33: {
+            modelAnswer: "<b>[모범 답안]</b> 포지셔닝 기술문은 우리의 브랜드 제품이 특정 '표적시장(Target)'에게 경쟁 상품군 대비 어떠한 독창적 '특별한 가치(CVP)'를 가져다주는지 명확한 문장으로 사명과 방향성을 기술해야 합니다. 또한 기획자는 단순히 스테이지 수, 무기 종류 등의 '수치적 스펙'만 나열식으로 강조하는 한계를 우회해야 합니다. 실질 소비자는 수치 조건보다 제품 접면에서 전달받는 정서적 인상과 '전체적인 감정'을 기억하고 매료되기 때문에, 표적 시장이 열광하는 감성 필터 정체성을 명확히 확립해 각인시키는 브랜딩이 생존의 열쇠가 됩니다.",
+            keywords: ["포지셔닝 기술문", "표적시장", "특별한 가치", "CVP", "수치", "스펙", "전체적인 감정", "소비자", "각인", "브랜딩", "정체성"]
+        }
+    };
+
+    let scoreCard = {};
+
+    function checkMultipleChoice(qNum, correctVal) {
+        const selected = document.querySelector(`input[name="q${qNum}"]:checked`);
+        const feedback = document.getElementById(`feedback-${qNum}`);
+        
+        if (!selected) {
+            alert("보기를 선택해 주세요!");
+            return;
+        }
+
+        if (parseInt(selected.value) === correctVal) {
+            feedback.className = "feedback-box correct";
+            feedback.innerHTML = `<div class="explanation-title">⭕ 정답입니다!</div><div class="explanation-content">${explanations[qNum]}</div>`;
+            scoreCard[qNum] = true;
+        } else {
+            feedback.className = "feedback-box incorrect";
+            feedback.innerHTML = `<div class="explanation-title">❌ 오답입니다. (정답: ${correctVal}번)</div><div class="explanation-content">${explanations[qNum]}</div>`;
+            scoreCard[qNum] = false;
+        }
+        updateSummary();
+    }
+
+    function checkShortAnswer(qNum, correctArray) {
+        const userInput = document.getElementById(`q${qNum}-input`).value.trim().toLowerCase();
+        const feedback = document.getElementById(`feedback-${qNum}`);
+
+        if (!userInput) {
+            alert("답안을 입력해 주세요!");
+            return;
+        }
+
+        let isCorrect = correctArray.some(ans => userInput.includes(ans.toLowerCase()));
+
+        if (isCorrect) {
+            feedback.className = "feedback-box correct";
+            feedback.innerHTML = `<div class="explanation-title">⭕ 정답입니다!</div><div class="explanation-content">${explanations[qNum]}</div>`;
+            scoreCard[qNum] = true;
+        } else {
+            feedback.className = "feedback-box incorrect";
+            feedback.innerHTML = `<div class="explanation-title">❌ 오답입니다. (인정 범위: ${correctArray.join(', ')})</div><div class="explanation-content">${explanations[qNum]}</div>`;
+            scoreCard[qNum] = false;
+        }
+        updateSummary();
+    }
+
+    function checkEssay(qNum) {
+        const userInput = document.getElementById(`q${qNum}-input`).value.trim();
+        const feedback = document.getElementById(`feedback-${qNum}`);
+
+        if (!userInput) {
+            alert("내용을 입력한 후 피드백을 확인하세요!");
+            return;
+        }
+
+        const data = explanations[qNum];
+        let matchedKeywords = [];
+        data.keywords.forEach(kw => {
+            if (userInput.toLowerCase().includes(kw.toLowerCase())) {
+                matchedKeywords.push(kw);
+            }
+        });
+
+        feedback.className = "feedback-box essay-feedback";
+        feedback.innerHTML = `
+            <div class="explanation-title">📝 서술형 채점 가이드 및 예시 답안</div>
+            <div class="explanation-content">
+                ${data.modelAnswer}
+                <br><br>
+                <b>[자가 검증 핵심 키워드 매칭결과]</b><br>
+                - 현재 제출 문장 내 포함된 마케팅 평가 키워드: <span style="color:blue; font-weight:bold;">[${matchedKeywords.join(', ')}]</span> (총 ${data.keywords.length}개 중 ${matchedKeywords.length}개 일치)<br>
+                - 강의 자료에 입각한 원문 용어와 서술 인과율 논리를 비교하여 스스로 부분 점수 또는 득점 판정을 내려보세요!
+            </div>
+        `;
+    }
+
+    function updateSummary() {
+        let score = 0;
+        let totalChecked = 0;
+        for (let i = 1; i <= 30; i++) {
+            if (scoreCard[i] !== undefined) {
+                totalChecked++;
+                if (scoreCard[i] === true) score++;
+            }
+        }
+        
+        const summaryBox = document.getElementById("total-score-box");
+        summaryBox.innerHTML = `현재 채점 진행 문제: ${totalChecked}/30 문항<br>객관식 및 단답형 누적 점수: <span style="color:var(--error-color); font-size:28px;">${score}</span> / 30 점`;
+    }
+</script>
+
+</body>
+</html>
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        header p {
+            margin: 5px 0 0 0;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* 주차별 이동 버튼 컨테이너 */
+        .nav-container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 0 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .nav-btn {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 8px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #555;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn:hover {
+            background-color: #eee;
+            border-color: #999;
+        }
+
+        .nav-btn.active {
+            background-color: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        }
+
+        /* 메인 콘텐츠 */
+        main {
+            max-width: 850px;
+            margin: 0 auto 50px auto;
+            padding: 0 15px;
+        }
+
+        .quiz-intro {
+            background-color: white;
+            border-left: 5px solid var(--primary-color);
+            padding: 15px 20px;
+            margin-bottom: 30px;
+            border-radius: 0 8px 8px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .section-title {
+            font-size: 18px;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 6px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        /* 문제 카드 스타일 */
+        .question-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border: 1px solid #eef0f2;
+        }
+
+        .question-header {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .q-num {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 4px;
+            padding: 2px 8px;
+            font-size: 12px;
+            margin-right: 10px;
+            white-space: nowrap;
+            margin-top: 2px;
+        }
+
+        /* 객관식 보기 스타일 */
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 15px 0;
+        }
+
+        .option-item {
+            margin-bottom: 10px;
+        }
+
+        .option-label {
+            display: block;
+            background-color: #fdfdfd;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 12px 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14.5px;
+        }
+
+        .option-label:hover {
+            background-color: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+
+        .option-item input[type="radio"] {
+            margin-right: 10px;
+            transform: scale(1.1);
+            vertical-align: middle;
+        }
+
+        /* 단답형/서술형 입력 */
+        .text-input-container {
+            margin-bottom: 15px;
+        }
+
+        .short-answer-input {
+            width: 100%;
+            max-width: 400px;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 14.5px;
+            box-sizing: border-box;
+        }
+
+        .essay-answer-input {
+            width: 100%;
+            height: 120px;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 14.5px;
+            resize: vertical;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+
+        /* 결과 확인 버튼 */
+        .action-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .action-btn:hover {
+            background-color: #00366b;
+        }
+
+        /* 피드백 및 해설박스 */
+        .feedback-box {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 6px;
+            display: none;
+            font-size: 14px;
+        }
+
+        .feedback-box.correct {
+            display: block;
+            background-color: #e8f5e9;
+            border-left: 5px solid var(--success-color);
+            color: #1b5e20;
+        }
+
+        .feedback-box.incorrect {
+            display: block;
+            background-color: #ffebee;
+            border-left: 5px solid var(--error-color);
+            color: #b71c1c;
+        }
+
+        .feedback-box.essay-feedback {
+            display: block;
+            background-color: #fff8e1;
+            border-left: 5px solid #ffb300;
+            color: #5d4037;
+        }
+
+        .explanation-title {
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .explanation-content {
+            margin-top: 5px;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        /* 점수 요약 하단 바 */
+        .summary-box {
+            background-color: white;
+            border: 2px solid var(--primary-color);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin-top: 40px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .summary-box h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+
+        .score-display {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--accent-color);
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>중앙대학교 게임기획 학습 평가 시스템</h1>
     <p>12주차 강의자료 기반 심화 자가 진단 평가 (사지선다 20문항 + 단답형 10문항 + 서술형 3문항)</p>
 </header>
 
